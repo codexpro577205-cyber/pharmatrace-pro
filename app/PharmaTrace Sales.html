@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PharmaTrace Pro - Sales</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#f4f6f9;--card:#ffffff;--ink:#0f172a;--muted:#6b7787;--line:#e6eaf1;
+  --brand:#0d9488;--brand-2:#0f766e;--brand-soft:#e6f6f4;
+  --danger:#dc2626;--danger-soft:#fee2e2;--warn:#c2410c;--warn-soft:#ffedd5;
+  --ok:#047857;--ok-soft:#d1fae5;--shadow:0 1px 2px rgba(15,23,42,.05),0 10px 30px -18px rgba(15,23,42,.35);
+}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:650;letter-spacing:-.01em}
+a{color:var(--brand-2)}
+/* top bar */
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{max-width:1220px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:180px}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(140deg,var(--brand),var(--brand-2));color:#fff;display:grid;place-items:center;font-weight:800;font-size:16px;box-shadow:0 4px 12px -4px rgba(13,148,136,.7)}
+.brand strong{display:block;font-size:15px;line-height:1.1}
+.brand small{color:var(--muted);font-size:11.5px;display:block}
+nav#nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+nav#nav button{border:0;background:transparent;color:var(--muted);padding:8px 12px;border-radius:9px;font:inherit;font-weight:550;cursor:pointer}
+nav#nav button:hover{background:#f1f5f9;color:var(--ink)}
+nav#nav button.active{background:var(--brand-soft);color:var(--brand-2)}
+/* layout */
+.wrap{max-width:1220px;margin:0 auto;padding:18px 16px 60px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:6px 0 16px;flex-wrap:wrap}
+.page-head h2{font-size:20px}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.center{text-align:center}
+.right{text-align:right}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.stat .lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:650}
+.stat .val{font-size:20px;font-weight:700;margin-top:4px;letter-spacing:-.02em}
+.stat .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+/* tables */
+table.tbl{width:100%;border-collapse:collapse}
+table.tbl th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);font-weight:700;white-space:nowrap}
+table.tbl td{padding:9px 10px;border-bottom:1px solid #f1f4f8;vertical-align:middle}
+table.tbl tr:last-child td{border-bottom:0}
+table.tbl tbody tr:hover{background:#fafbfd}
+.tbl-wrap{overflow-x:auto}
+/* forms */
+.in,select.in,textarea.in{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#fff;color:var(--ink);outline:none}
+.in:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(13,148,136,.13)}
+.in.sm{padding:5px 8px;border-radius:7px;font-size:13px}
+label.fld{display:block;margin-bottom:10px}
+label.fld span{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row>*{min-width:0}
+.btn{border:0;border-radius:9px;padding:9px 14px;font:inherit;font-weight:600;background:var(--brand);color:#fff;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--brand-2)}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{background:#f8fafc}
+.btn.danger{background:var(--danger)}
+.btn.sm{padding:5px 10px;font-size:12.5px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+/* badges */
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11.5px;font-weight:650;border:1px solid transparent;white-space:nowrap}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.badge.warn{background:var(--warn-soft);color:var(--warn)}
+.badge.danger{background:var(--danger-soft);color:var(--danger)}
+.badge.muted{background:#f1f5f9;color:var(--muted)}
+.badge.brand{background:var(--brand-soft);color:var(--brand-2)}
+/* pos */
+.pos{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;align-items:start}
+@media(max-width:940px){.pos{grid-template-columns:1fr}}
+.results{margin-top:10px;max-height:52vh;overflow:auto}
+.res{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:10px;margin-bottom:7px;cursor:pointer;background:#fff}
+.res:hover{border-color:var(--brand);background:#f7fdfc}
+.res .nm{font-weight:600}
+.res .meta{font-size:11.5px;color:var(--muted)}
+.totbox{border-top:1px dashed var(--line);margin-top:10px;padding-top:10px}
+.totline{display:flex;justify-content:space-between;padding:3px 0}
+.totline.grand{font-size:17px;font-weight:750;border-top:1px solid var(--line);margin-top:6px;padding-top:8px}
+/* modal */
+#modal-root.open{display:block}
+#modal-root{display:none;position:fixed;inset:0;z-index:80}
+.backdrop{position:absolute;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:16px;overflow:auto}
+.modal{background:#fff;border-radius:16px;max-width:620px;width:100%;box-shadow:0 30px 80px -20px rgba(15,23,42,.5);max-height:90vh;display:flex;flex-direction:column}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+.modal-body{padding:16px 18px;overflow:auto}
+.x{border:0;background:transparent;font-size:22px;line-height:1;cursor:pointer;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media(max-width:560px){.two{grid-template-columns:1fr}}
+/* toast */
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:120;display:flex;flex-direction:column;gap:8px;align-items:center}
+.tmsg{background:#0f172a;color:#fff;padding:10px 16px;border-radius:10px;font-weight:550;box-shadow:0 12px 30px -10px rgba(15,23,42,.6);animation:pop .18s ease-out}
+.tmsg.err{background:#b91c1c}.tmsg.warn{background:#b45309}.tmsg.ok{background:#047857}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* misc */
+.empty{padding:34px 16px;text-align:center;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer}
+.chip.active{background:var(--brand-soft);border-color:#bde9e3;color:var(--brand-2)}
+.hint{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--muted);font-size:12.5px}
+#print-area{display:none}
+/* receipt */
+.rcpt{font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;max-width:320px;margin:0 auto;color:#000}
+.rcpt h3{text-align:center;margin:0 0 2px;font-size:15px;font-family:inherit}
+.rcpt .c{text-align:center}
+.rcpt hr{border:0;border-top:1px dashed #999;margin:8px 0}
+.rcpt table{width:100%;border-collapse:collapse;font-size:12px}
+.rcpt td{padding:1px 0;vertical-align:top}
+.rcpt .r{text-align:right}
+@media print{
+  body{background:#fff}
+  .topbar,nav#nav,#app,#toast,#modal-root{display:none!important}
+  #print-area{display:block!important}
+  .rcpt{max-width:none;width:80mm}
+}
+.qtybox{display:flex;gap:4px;align-items:center}
+.qtybox .in{width:54px;text-align:center;padding:5px 4px}
+.lnk{background:none;border:0;color:#0d9488;font:inherit;font-size:12px;cursor:pointer;padding:0;text-decoration:underline}
+.lnk:hover{color:#0f766e}
+
+.chat-log{max-height:54vh;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:6px 2px}
+.msg{max-width:84%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.55;word-wrap:break-word;overflow-wrap:anywhere}
+.msg.bot{align-self:flex-start;background:#f1f5f9;border:1px solid var(--line);border-bottom-left-radius:5px}
+.msg.user{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:5px}
+.msg code{font-size:12px;color:var(--ink)}
+nav#nav button[data-route="assistant"]{color:var(--brand-2);font-weight:700}
+.authwrap{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(160deg,#0f766e,#0d9488 55%,#0f172a)}
+.authcard{background:#fff;border-radius:18px;padding:26px;width:100%;max-width:400px;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.authlogo{width:52px;height:52px;border-radius:14px;background:linear-gradient(140deg,var(--brand),var(--brand-2));color:#fff;display:grid;place-items:center;font-weight:800;font-size:24px;margin-bottom:12px}
+.authcard h2{margin:0 0 4px;font-size:20px}
+.authcard p{margin:0 0 16px;font-size:13px}
+.err{color:#b91c1c;font-size:12.5px;min-height:16px;margin:6px 0 10px;font-weight:600}
+.userchip{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12.5px}
+.userchip .who{text-align:right;line-height:1.15}
+.userchip .who b{display:block;font-size:12.5px}
+.userchip .who span{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.pill.owner{background:#ecfdf5;color:#047857}
+.pill.subadmin{background:#eff6ff;color:#1d4ed8}
+.pill.sales{background:#fff7ed;color:#c2410c}
+.admin-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.admin-tabs button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 14px;font:inherit;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.admin-tabs button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.panel-tag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:var(--brand-soft);color:var(--brand-2);font-size:10.5px;font-weight:800;font-style:normal;vertical-align:middle;letter-spacing:.03em}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="bar">
+    <div class="brand">
+      <span class="logo">P</span>
+      <div><strong>PharmaTrace Pro</strong><em class="panel-tag">Sales</em><small id="shopName">Pharmacy Manager</small></div>
+    </div>
+    <nav id="nav">
+      <button data-route="sales">New Sale</button>
+      <button data-route="mysales">My Sales</button>
+      <button data-route="assistant">Assistant</button>
+    </nav>
+    <div class="userchip" id="userchip"></div>
+  </div>
+</header>
+
+<main id="app"></main>
+<div id="print-area"></div>
+<div id="toast"></div>
+<div id="modal-root"></div>
+
+<script>
+/* =========================================================
+   PharmaTrace Pro - offline pharmacy manager (single file)
+   All data is stored in this browser's localStorage.
+   ========================================================= */
+
+/* ---------- tiny helpers ---------- */
+var $ = function(s,r){return (r||document).querySelector(s)};
+var $$ = function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function num(v){var n=parseFloat(v);return isNaN(n)?0:n}
+function pad(n){return String(n).padStart(2,'0')}
+function localDate(d){var x=new Date(d);return x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate())}
+function fmtDate(iso){if(!iso)return '-';var d=new Date(iso);return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
+function fmtDT(iso){if(!iso)return '-';var d=new Date(iso);return fmtDate(iso)+' '+pad(d.getHours())+':'+pad(d.getMinutes())}
+function money(v){
+  var n=num(v);
+  var s=n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  return (DB.settings.currency||'')+' '+s;
+}
+function toast(msg,kind){
+  var box=$('#toast');
+  var el=document.createElement('div');
+  el.className='tmsg '+(kind||'');
+  el.textContent=msg;
+  box.appendChild(el);
+  setTimeout(function(){el.style.transition='opacity .3s';el.style.opacity='0';setTimeout(function(){el.remove()},320)},2600);
+}
+
+/* ---------- storage ---------- */
+var DB_KEY='pharmatrace_pro_v1';
+function blankDB(){
+  return {
+    settings:{
+      shopName:'My Pharmacy', licenseNo:'', address:'', phone:'',
+      currency:'PKR', taxPercent:0, expiryWarnDays:90,
+      receiptNote:'Thank you. Get well soon!', lowStockWarn:true,
+      defaultMargin:15, taxOnProfit:0.5
+    },
+    medicines:[], batches:[], sales:[], purchases:[],
+    suppliers:[], customers:[],
+    users:[], audit:[],
+    counters:{invoice:1}
+  };
+}
+function loadDB(){
+  try{
+    var raw=localStorage.getItem(DB_KEY);
+    if(!raw) return blankDB();
+    var d=JSON.parse(raw), b=blankDB();
+    d.medicines=(d.medicines||[]).map(function(m){
+      m.packSize=Math.floor(num(m.packSize))||1;
+      m.packName=m.packName||'Pack';
+      m.unit=m.unit||'Unit';
+      if(m.margin==null) m.margin=null;
+      return m;
+    });
+    d.users=d.users||[];
+    d.audit=d.audit||[];
+    return Object.assign(b,d,{
+      settings:Object.assign(b.settings,d.settings||{}),
+      counters:Object.assign(b.counters,d.counters||{})
+    });
+  }catch(e){ console.warn('load failed',e); return blankDB(); }
+}
+var DB=loadDB();
+function persist(){
+  try{ localStorage.setItem(DB_KEY,JSON.stringify(DB)); }
+  catch(e){ toast('Could not save: browser storage is full or blocked','err'); }
+}
+
+/* =========================================================
+   SECURITY / ROLES
+   ========================================================= */
+function sha256(ascii){
+  function rr(v,a){return (v>>>a)|(v<<(32-a))}
+  var mp=Math.pow, maxWord=mp(2,32), result='', words=[], asciiBitLength=ascii.length*8;
+  var hash=sha256.h=sha256.h||[], k=sha256.k=sha256.k||[], primeCounter=k.length;
+  var isComposite={};
+  for(var candidate=2; primeCounter<64; candidate++){
+    if(!isComposite[candidate]){
+      for(var i=0;i<313;i+=candidate) isComposite[i]=candidate;
+      hash[primeCounter]=(mp(candidate,.5)*maxWord)|0;
+      k[primeCounter++]=(mp(candidate,1/3)*maxWord)|0;
+    }
+  }
+  ascii+='\x80';
+  while(ascii.length%64-56) ascii+='\x00';
+  for(i=0;i<ascii.length;i++){
+    var j=ascii.charCodeAt(i);
+    if(j>>8) return '';
+    words[i>>2]|=j<<((3-i)%4)*8;
+  }
+  words[words.length]=(asciiBitLength/maxWord)|0;
+  words[words.length]=asciiBitLength;
+  for(j=0;j<words.length;){
+    var w=words.slice(j,j+=16), oldHash=hash;
+    hash=hash.slice(0,8);
+    for(i=0;i<64;i++){
+      var w15=w[i-15], w2=w[i-2], a=hash[0], e=hash[4];
+      var t1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]
+        +(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10))|0));
+      var t2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+      hash=[(t1+t2)|0].concat(hash);
+      hash[4]=(hash[4]+t1)|0;
+    }
+    for(i=0;i<8;i++) hash[i]=(hash[i]+oldHash[i])|0;
+  }
+  for(i=0;i<8;i++){
+    for(j=3;j+1;j--){
+      var b=(hash[i]>>(j*8))&255;
+      result+=((b<16)?'0':'')+b.toString(16);
+    }
+  }
+  return result;
+}
+function newSalt(){ return Math.random().toString(36).slice(2,10)+Date.now().toString(36) }
+function hashPass(pass,salt){ return sha256(String(salt)+'::'+String(pass)) }
+
+var session=null;
+function currentUser(){ return session ? DB.users.filter(function(u){return u.id===session.userId})[0] : null }
+function roleLabel(r){ return r==='owner'?'Main Admin' : r==='subadmin'?'Sub Admin' : r==='sales'?'Sales' : r }
+var PANEL={role:'sales',name:'Sales'};
+var PERMS={
+  sale:['owner','subadmin','sales'],
+  dashboard:['owner','subadmin','sales'],
+  sales:['owner','subadmin','sales'],
+  mysales:['owner','subadmin','sales'],
+  inventory:['owner','subadmin'],
+  stockIn:['owner','subadmin'],
+  fullInventory:['owner'],
+  purchases:['owner'],
+  parties:['owner'],
+  reports:['owner'],
+  settings:['owner'],
+  admin:['owner'],
+  assistant:['owner','subadmin','sales']
+};
+function can(what){
+  var u=currentUser(); if(!u) return false;
+  var list=PERMS[what]; if(!list) list=PERMS.admin;
+  return list.indexOf(u.role)>=0;
+}
+function logEvent(action,detail){
+  var u=currentUser();
+  DB.audit.push({id:uid(),at:new Date().toISOString(),userId:u?u.id:'',userName:u?u.name:'System',role:u?u.role:'',action:action,detail:detail||''});
+  if(DB.audit.length>3000) DB.audit=DB.audit.slice(-3000);
+}
+function doLogin(empId,pass){
+  var key=String(empId||'').trim().toLowerCase();
+  var u=DB.users.filter(function(x){return String(x.empId).toLowerCase()===key})[0];
+  if(!u) return 'Employee ID nahi mila';
+  if(!u.active) return 'Ye account band hai — main admin se rabta karo';
+  if(hashPass(pass,u.salt)!==u.hash) return 'Password ghalat hai';
+  if(PANEL.role && u.role!==PANEL.role) return 'Ye '+PANEL.name+' panel hai - aap ka account is panel ke liye nahi hai.';
+  session={userId:u.id,role:u.role,name:u.name,empId:u.empId};
+  u.lastLogin=new Date().toISOString();
+  logEvent('login','Login: '+u.name+' ('+roleLabel(u.role)+')');
+  persist();
+  route = (u.role==='sales') ? 'sales' : 'dashboard';
+  render();
+  return null;
+}
+function doLogout(){
+  logEvent('logout','Logout');
+  persist();
+  session=null; route='dashboard'; chat=[];
+  render();
+}
+function renderSetup(){
+  if(PANEL.role!=='owner'){ $('#app').innerHTML='<div class="authwrap"><div class="authcard"><div class="authlogo">P</div><h2>Setup baqi hai</h2><p class="muted">Pehle <b>PharmaTrace Admin</b> panel khol kar main admin account banao, phir ye panel chalega.</p></div></div>'; return; }
+  var nav=$('#nav'); if(nav) nav.style.display='none';
+  var uc=$('#userchip'); if(uc) uc.innerHTML='';
+  $('#app').innerHTML='<div class="authwrap"><div class="authcard">'+
+    '<div class="authlogo">P</div><h2>PharmaTrace Pro</h2>'+
+    '<p class="muted">Pehli dafa setup — main admin (malik) ka account banao. Ye password sirf aap ke paas ho.</p>'+
+    '<form id="setup-form">'+
+      '<label class="fld"><span>Dukaan ka naam</span><input class="in" name="shopName" required value="My Pharmacy"></label>'+
+      '<label class="fld"><span>Aap ka naam</span><input class="in" name="name" required placeholder="Malik ka naam"></label>'+
+      '<label class="fld"><span>Employee ID</span><input class="in" name="empId" required value="admin"></label>'+
+      '<label class="fld"><span>Password (kam az kam 4 harf)</span><input class="in" name="pass" type="password" required minlength="4"></label>'+
+      '<label class="fld"><span>Dobara password</span><input class="in" name="pass2" type="password" required minlength="4"></label>'+
+      '<div class="err" id="setup-err"></div>'+
+      '<button class="btn" style="width:100%" type="submit">Account banao aur shuru karo</button>'+
+    '</form></div></div>';
+  $('#setup-form').onsubmit=function(e){
+    e.preventDefault();
+    var f=e.target, d={}; new FormData(f).forEach(function(v,k){d[k]=v});
+    var errEl=$('#setup-err');
+    if(String(d.pass).length<4){ errEl.textContent='Password kam az kam 4 harf ka ho'; return; }
+    if(d.pass!==d.pass2){ errEl.textContent='Dono password ek jaise nahi hain'; return; }
+    var salt=newSalt();
+    var u={id:uid(),empId:String(d.empId).trim()||'admin',name:String(d.name).trim(),role:'owner',
+      salt:salt,hash:hashPass(d.pass,salt),active:true,createdAt:new Date().toISOString(),lastLogin:null};
+    DB.users.push(u);
+    DB.settings.shopName=String(d.shopName).trim()||'My Pharmacy';
+    session={userId:u.id,role:'owner',name:u.name,empId:u.empId};
+    logEvent('setup','Main admin account banaya: '+u.name);
+    persist(); route='dashboard'; render();
+  };
+}
+function renderLogin(){
+  var nav=$('#nav'); if(nav) nav.style.display='none';
+  var uc=$('#userchip'); if(uc) uc.innerHTML='';
+  $('#app').innerHTML='<div class="authwrap"><div class="authcard">'+
+    '<div class="authlogo">P</div><h2>'+esc(DB.settings.shopName||'PharmaTrace Pro')+'</h2>'+
+    '<p class="muted">Login karo — <b>Sales panel</b></p>'+
+    '<form id="login-form">'+
+      '<label class="fld"><span>Employee ID</span><input class="in" name="empId" required autocomplete="username"></label>'+
+      '<label class="fld"><span>Password</span><input class="in" name="pass" type="password" required autocomplete="current-password"></label>'+
+      '<div class="err" id="login-err"></div>'+
+      '<button class="btn" style="width:100%" type="submit">Login</button>'+
+    '</form>'+
+    '<p class="small muted" style="margin:14px 0 0">Sab kuch isi PC par. Koi internet nahi.</p>'+
+    '</div></div>';
+  var f=$('#login-form');
+  f.onsubmit=function(e){
+    e.preventDefault();
+    var d={}; new FormData(f).forEach(function(v,k){d[k]=v});
+    var err=doLogin(d.empId,d.pass);
+    if(err){ $('#login-err').textContent=err; }
+  };
+  var i=$('#login-form [name=empId]'); if(i) i.focus();
+}
+function routeAllowed(r){
+  var map={dashboard:'dashboard',sales:'sales',mysales:'mysales',inventory:'inventory',purchases:'purchases',
+    parties:'parties',reports:'reports',settings:'settings',admin:'admin',assistant:'assistant'};
+  return can(map[r]||'admin');
+}
+
+/* ---------- domain helpers ---------- */
+function medById(id){ return DB.medicines.find(function(m){return m.id===id}) }
+function medMargin(m){ var mg=num(m&&m.margin); return mg>0?mg:(num(DB.settings.defaultMargin)||15) }
+function medCost(m){ var pr=num(m&&m.price); return Math.round(pr*(1-medMargin(m)/100)*100)/100 }
+function medProfit(m){ return Math.round((num(m&&m.price)-medCost(m))*100)/100 }
+function roleTag(r){ return '<span class="pill '+esc(r)+'">'+esc(roleLabel(r))+'</span>' }
+function stockOf(medId){
+  return DB.batches.filter(function(b){return b.medId===medId})
+    .reduce(function(t,b){return t+num(b.qty)},0);
+}
+function packSizeOf(m){ var ps=Math.floor(num(m&&m.packSize)); return ps>1?ps:1 }
+function unitName(m){ return (m&&m.unit)||'unit' }
+function packName(m){ return (m&&m.packName)||'pack' }
+function trimNum(n){ n=Math.round(num(n)*100)/100; return String(n) }
+/* shows base units as packs + loose units, e.g. "2 Strip + 3 Tablet" */
+function fmtQty(m,units){
+  units=num(units);
+  var ps=packSizeOf(m), u=unitName(m);
+  if(ps<=1) return trimNum(units)+' '+u;
+  var p=Math.floor(units/ps), r=Math.round((units-p*ps)*100)/100, out=[];
+  if(p>0) out.push(p+' '+packName(m));
+  if(r>0) out.push(trimNum(r)+' '+u);
+  if(!out.length) out.push('0 '+u);
+  return out.join(' + ');
+}
+function packHint(m){
+  var ps=packSizeOf(m);
+  if(ps<=1) return 'Sold as 1 '+unitName(m);
+  return '1 '+packName(m)+' = '+ps+' '+unitName(m);
+}
+/* money charged for N base units: whole packs use the pack price when one is set */
+function lineAmount(m,units){
+  units=num(units);
+  var ps=packSizeOf(m), pp=num(m&&m.packPrice), up=num(m&&m.price);
+  if(ps>1 && pp>0){
+    var packs=Math.floor(units/ps), rem=Math.round((units-packs*ps)*100)/100;
+    return packs*pp + rem*up;
+  }
+  return units*up;
+}
+function effUnitPrice(m,units){
+  units=num(units);
+  if(units<=0) return num(m&&m.price);
+  return Math.round(lineAmount(m,units)/units*100)/100;
+}
+function expiryInfo(exp){
+  if(!exp) return {cls:'muted',text:'-',days:null};
+  var p=String(exp).split('-'), y=+p[0], m=+p[1];
+  if(!y||!m) return {cls:'muted',text:'-',days:null};
+  var end=new Date(y,m,0,23,59,59);
+  var days=Math.round((end-Date.now())/86400000);
+  var warn=num(DB.settings.expiryWarnDays)||90;
+  if(days<0) return {cls:'danger',text:'Expired',days:days};
+  if(days<=warn) return {cls:'warn',text:days+' d left',days:days};
+  return {cls:'ok',text:days+' d',days:days};
+}
+function monthLabel(exp){
+  if(!exp) return '-';
+  var p=String(exp).split('-');
+  return (p[1]||'')+'/'+(p[0]||'');
+}
+function nextInvoiceNo(){ return 'INV-'+String(num(DB.counters.invoice)||1).padStart(5,'0') }
+function saleProfit(s){
+  var gross=s.items.reduce(function(t,i){
+    var amt=(i.amount!=null?num(i.amount):num(i.qty)*num(i.price));
+    return t+amt-num(i.qty)*num(i.cost);
+  },0)-num(s.discount);
+  return Math.round((gross-profitTax(gross))*100)/100;
+}
+function saleGrossProfit(s){
+  return s.items.reduce(function(t,i){
+    var amt=(i.amount!=null?num(i.amount):num(i.qty)*num(i.price));
+    return t+amt-num(i.qty)*num(i.cost);
+  },0)-num(s.discount);
+}
+function profitTax(g){ return Math.round(num(g)*num(DB.settings.taxOnProfit||0.5))/100 }
+function stockStatus(m){
+  var st=stockOf(m.id), re=num(m.reorderLevel);
+  if(st<=0) return {cls:'danger',text:'Out of stock'};
+  if(re>0 && st<=re) return {cls:'warn',text:'Low stock'};
+  return {cls:'ok',text:'In stock'};
+}
+
+/* ---------- modal ---------- */
+function modal(title,html,onMount,wide){
+  var root=$('#modal-root');
+  root.innerHTML='<div class="backdrop"><div class="modal" style="'+(wide?'max-width:760px':'')+'">'+
+    '<div class="modal-head"><h3>'+esc(title)+'</h3><button class="x" data-close>&times;</button></div>'+
+    '<div class="modal-body">'+html+'</div></div></div>';
+  root.classList.add('open');
+  $$('[data-close]',root).forEach(function(b){b.onclick=closeModal});
+  root.querySelector('.backdrop').onclick=function(e){ if(e.target.classList.contains('backdrop')) closeModal(); };
+  if(onMount) onMount(root);
+}
+function closeModal(){ var r=$('#modal-root'); r.classList.remove('open'); r.innerHTML=''; }
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+function dashboardHTML(){
+  var today=localDate(new Date()), month=today.slice(0,7);
+  var todayS=DB.sales.filter(function(s){return localDate(s.date)===today});
+  var monthS=DB.sales.filter(function(s){return localDate(s.date).slice(0,7)===month});
+  var sum=function(arr,f){return arr.reduce(function(t,x){return t+f(x)},0)};
+  var totalOf=function(arr){return sum(arr,function(s){return num(s.total)})};
+  var profitOf=function(arr){return sum(arr,function(s){return saleProfit(s)})};
+  var low=DB.medicines.filter(function(m){
+    var st=stockOf(m.id), re=num(m.reorderLevel);
+    return st<=0 || (re>0 && st<=re);
+  });
+  var warnDays=num(DB.settings.expiryWarnDays)||90;
+  var expSoon=DB.batches.filter(function(b){
+    if(num(b.qty)<=0 || !b.expiry) return false;
+    var d=expiryInfo(b.expiry).days;
+    return d!==null && d<=warnDays;
+  }).sort(function(a,b){return String(a.expiry).localeCompare(String(b.expiry))});
+  var stockVal=sum(DB.batches,function(b){return num(b.qty)*num(b.cost)});
+  var recent=DB.sales.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date)}).slice(0,6);
+
+  var h='<div class="wrap">';
+  h+='<div class="page-head"><h2>Dashboard</h2><div class="muted small">'+fmtDate(new Date())+' &middot; all data stored on this device</div></div>';
+
+  if(!DB.medicines.length){
+    h+='<div class="card" style="margin-bottom:16px">'+
+       '<h3 style="margin-bottom:6px">Welcome to PharmaTrace Pro</h3>'+
+       '<p class="muted" style="margin:0 0 12px">Start by adding your medicines, or load a small demo set to see how everything works.</p>'+
+       '<div class="row"><button class="btn" data-act="add-med">+ Add medicine</button>'+
+       '<button class="btn ghost" data-act="demo">Load demo data</button></div></div>';
+  }
+
+  h+='<div class="cards">'+
+    card('Today sales',money(totalOf(todayS)),todayS.length+' invoice'+(todayS.length===1?'':'s'))+
+    card('This month',money(totalOf(monthS)),monthS.length+' invoices')+
+    card('Month profit',money(profitOf(monthS)),'after discount')+
+    card('Stock value',money(stockVal),'at cost price')+
+    card('Low / out of stock',String(low.length),'items need reorder')+
+    card('Expiring soon',String(expSoon.length),'within '+warnDays+' days')+
+  '</div>';
+
+  h+='<div class="grid2">';
+
+  /* recent sales */
+  h+='<div class="card"><div class="row" style="justify-content:space-between;margin-bottom:6px"><h3>Recent sales</h3>'+
+     '<button class="btn ghost sm" data-route="sales">New sale</button></div>';
+  if(!recent.length){
+    h+='<div class="empty">No sales yet.</div>';
+  }else{
+    h+='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th class="right">Total</th><th></th></tr></thead><tbody>';
+    recent.forEach(function(s){
+      h+='<tr><td><strong>'+esc(s.invoiceNo)+'</strong></td><td class="muted small">'+fmtDT(s.date)+'</td><td>'+esc(s.customerName||'Walk-in')+'</td>'+
+         '<td class="right">'+money(s.total)+'</td><td class="right"><button class="btn ghost sm" data-receipt="'+s.id+'">View</button></td></tr>';
+    });
+    h+='</tbody></table></div>';
+  }
+  h+='</div>';
+
+  /* alerts */
+  h+='<div class="card"><h3 style="margin-bottom:8px">Alerts</h3>';
+  var alerts=[];
+  low.slice(0,6).forEach(function(m){
+    var st=stockOf(m.id);
+    alerts.push('<div class="row" style="justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f4f8">'+
+      '<div><strong>'+esc(m.name)+'</strong><div class="small muted">'+(st<=0?'out of stock':'only '+esc(fmtQty(m,st))+' left')+'</div></div>'+
+      '<span class="badge '+(st<=0?'danger':'warn')+'">'+(st<=0?'Out':'Low')+'</span></div>');
+  });
+  expSoon.slice(0,6).forEach(function(b){
+    var m=medById(b.medId), e=expiryInfo(b.expiry);
+    alerts.push('<div class="row" style="justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f4f8">'+
+      '<div><strong>'+esc(m?m.name:'(deleted)')+'</strong><div class="small muted">batch '+esc(b.batchNo||'-')+' &middot; '+esc(fmtQty(m||{unit:'unit'},b.qty))+' &middot; exp '+monthLabel(b.expiry)+'</div></div>'+
+      '<span class="badge '+e.cls+'">'+esc(e.text)+'</span></div>');
+  });
+  h+= alerts.length? alerts.join('') : '<div class="empty">Everything looks good. No alerts.</div>';
+  h+='</div>';
+
+  h+='</div></div>';
+  return h;
+}
+function card(lbl,val,sub){
+  return '<div class="card stat"><div class="lbl">'+esc(lbl)+'</div><div class="val">'+esc(val)+'</div><div class="sub">'+esc(sub||'')+'</div></div>';
+}
+
+/* =========================================================
+   NEW SALE (POS)
+   ========================================================= */
+var cart=[];
+var posQ='', posCustomer='', posPay='Cash', posDiscount=0, posNote='';
+
+function posHTML(){
+  return '<div class="wrap">'+
+    '<div class="page-head"><h2>New Sale</h2><div class="muted small">Invoice '+esc(nextInvoiceNo())+'</div></div>'+
+    '<div class="pos">'+
+      '<div class="card">'+
+        '<div class="row">'+
+          '<input id="pos-q" class="in" style="flex:1" placeholder="Search by name, generic or company…" value="'+esc(posQ)+'" autocomplete="off">'+
+          '<input id="pos-bc" class="in" style="max-width:170px" placeholder="Barcode ⏎" autocomplete="off">'+
+        '</div>'+
+        '<div id="pos-results" class="results"></div>'+
+      '</div>'+
+      '<div class="card">'+
+        '<div id="cart-wrap"></div>'+
+        '<div id="totals"></div>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+function posBind(){
+  var q=$('#pos-q'), bc=$('#pos-bc');
+  q.addEventListener('input',function(){ posQ=q.value; renderResults(); });
+  bc.addEventListener('keydown',function(e){
+    if(e.key!=='Enter') return;
+    e.preventDefault();
+    var code=bc.value.trim(); if(!code) return;
+    var m=DB.medicines.find(function(x){return String(x.barcode||'')===code});
+    if(m){ addToCart(m.id); bc.value=''; bc.focus(); }
+    else toast('No medicine with barcode '+code,'warn');
+  });
+  renderResults();
+  renderCart();
+}
+function renderResults(){
+  var box=$('#pos-results'); if(!box) return;
+  var term=(posQ||'').toLowerCase().trim();
+  var list=DB.medicines.filter(function(m){
+    if(!term) return true;
+    return (m.name||'').toLowerCase().indexOf(term)>=0
+      || (m.generic||'').toLowerCase().indexOf(term)>=0
+      || (m.company||'').toLowerCase().indexOf(term)>=0
+      || String(m.barcode||'').toLowerCase().indexOf(term)>=0;
+  }).slice(0,40);
+  if(!DB.medicines.length){
+    box.innerHTML='<div class="empty">No medicines yet. Add them in <strong>Inventory</strong> first.</div>'; return;
+  }
+  if(!list.length){ box.innerHTML='<div class="empty">Nothing matched.</div>'; return; }
+  box.innerHTML=list.map(function(m){
+    var st=stockOf(m.id), stt=stockStatus(m);
+    return '<div class="res" data-add="'+m.id+'">'+
+      '<div><div class="nm">'+esc(m.name)+'</div><div class="meta">'+esc([m.generic,m.company,m.category].filter(Boolean).join(' · '))+'</div></div>'+
+      '<div class="right"><div><strong>'+money(m.price)+'</strong><span class="small muted">/'+esc(unitName(m))+'</span></div>'+
+      '<div class="small muted">'+esc(packHint(m))+'</div>'+
+      '<div class="small">'+esc(fmtQty(m,st))+' in stock</div>'+
+      '<div class="small" style="margin-top:3px"><span class="badge '+stt.cls+'">'+stt.text+'</span> <span class="badge brand">+ Add</span></div></div></div>';
+  }).join('');
+  $$('[data-add]',box).forEach(function(el){ el.onclick=function(){ addToCart(el.getAttribute('data-add')) } });
+}
+function addToCart(medId){
+  var m=medById(medId); if(!m) return;
+  var st=stockOf(m.id);
+  var line=cart.find(function(c){return c.medId===medId});
+  var want=(line?line.units:0)+1;
+  if(want>st){ toast('Only '+fmtQty(m,st)+' in stock for '+m.name,'warn'); if(st<=0) return; }
+  if(line) line.units=Math.min(want,st);
+  else cart.push({medId:medId,name:m.name,generic:m.generic||'',units:1});
+  renderCart();
+}
+function cartSubtotal(){ return cart.reduce(function(t,c){ var m=medById(c.medId); return t+lineAmount(m,c.units) },0) }
+function cartTotals(){
+  var sub=cartSubtotal();
+  var disc=num(posDiscount);
+  if(disc>sub) disc=sub;
+  var taxable=sub-disc;
+  var tax=taxable*(num(DB.settings.taxPercent)/100);
+  return {sub:sub,disc:disc,tax:tax,total:taxable+tax};
+}
+function renderCart(){
+  var wrap=$('#cart-wrap'), tot=$('#totals');
+  if(!wrap||!tot) return;
+  if(!cart.length){
+    wrap.innerHTML='<div class="empty">Cart is empty.<br><span class="small">Search or scan on the left to add medicines.</span></div>';
+    tot.innerHTML='';
+    return;
+  }
+  var rows=cart.map(function(it,i){
+    var m=medById(it.medId)||{};
+    var ps=packSizeOf(m), amt=lineAmount(m,it.units);
+    var each=it.units>0?amt/it.units:num(m.price);
+    return '<tr><td><strong>'+esc(it.name)+'</strong>'+
+      '<div class="small muted">'+esc(fmtQty(m,it.units))+'</div></td>'+
+      '<td style="width:130px"><div class="qtybox">'+
+        '<button class="btn ghost sm" data-minus="'+i+'" title="One less">&minus;</button>'+
+        '<input class="in sm" type="number" min="1" step="1" value="'+num(it.units)+'" data-qty="'+i+'">'+
+        '<button class="btn ghost sm" data-plus="'+i+'" title="One more">+</button>'+
+      '</div>'+(ps>1?'<div style="margin-top:3px"><button class="lnk" data-pack="'+i+'">+1 '+esc(packName(m))+' ('+ps+')</button></div>':'')+
+      '</td>'+
+      '<td class="right small">'+money(each)+'</td>'+
+      '<td class="right"><strong>'+money(amt)+'</strong></td>'+
+      '<td class="right"><button class="btn ghost sm" data-del="'+i+'">✕</button></td></tr>';
+  }).join('');
+  wrap.innerHTML='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Item</th><th>Qty</th><th class="right">Rate</th><th class="right">Amount</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  var setQty=function(i,v){
+    var m=medById(cart[i].medId), st=stockOf(cart[i].medId);
+    v=Math.floor(num(v)); if(v<1) v=1;
+    if(v>st){ toast('Only '+fmtQty(m,st)+' in stock','warn'); v=st>0?st:1; }
+    cart[i].units=v; renderCart();
+  };
+  $$('[data-del]',wrap).forEach(function(b){ b.onclick=function(){ cart.splice(+b.getAttribute('data-del'),1); renderCart(); } });
+  $$('[data-minus]',wrap).forEach(function(b){ b.onclick=function(){ var i=+b.getAttribute('data-minus'); setQty(i,cart[i].units-1) } });
+  $$('[data-plus]',wrap).forEach(function(b){ b.onclick=function(){ var i=+b.getAttribute('data-plus'); setQty(i,cart[i].units+1) } });
+  $$('[data-pack]',wrap).forEach(function(b){ b.onclick=function(){ var i=+b.getAttribute('data-pack'); setQty(i,cart[i].units+packSizeOf(medById(cart[i].medId))) } });
+  $$('[data-qty]',wrap).forEach(function(inp){ inp.addEventListener('change',function(){ setQty(+inp.getAttribute('data-qty'),inp.value) }) });
+
+  var t=cartTotals();
+  tot.innerHTML='<div class="totbox">'+
+    '<label class="fld"><span>Customer name (optional)</span><input id="pos-cust" class="in" value="'+esc(posCustomer)+'" placeholder="Walk-in"></label>'+
+    '<div class="two">'+
+      '<label class="fld"><span>Payment</span><select id="pos-pay" class="in">'+
+        ['Cash','Card','Easypaisa','JazzCash','Credit'].map(function(p){return '<option'+(posPay===p?' selected':'')+'>'+p+'</option>'}).join('')+
+      '</select></label>'+
+      (can('fullInventory')?'<label class="fld"><span>Discount</span><input id="pos-disc" class="in" type="number" min="0" step="1" value="'+num(posDiscount)+'"></label>':'<label class="fld"><span>Rate</span><input class="in" value="Retail only" disabled></label>')+
+    '</div>'+
+    '<div class="totline"><span>Subtotal</span><span>'+money(t.sub)+'</span></div>'+
+    (num(DB.settings.taxPercent)>0?'<div class="totline"><span>Tax ('+num(DB.settings.taxPercent)+'%)</span><span>'+money(t.tax)+'</span></div>':'')+
+    (t.disc>0?'<div class="totline"><span>Discount</span><span>-'+money(t.disc)+'</span></div>':'')+
+    '<div class="totline grand"><span>Total</span><span>'+money(t.total)+'</span></div>'+
+    '<div class="row" style="margin-top:12px"><button id="pos-complete" class="btn" style="flex:1">Complete sale</button>'+
+    '<button id="pos-clear" class="btn ghost">Clear</button></div>'+
+  '</div>';
+
+  $('#pos-cust').addEventListener('input',function(){ posCustomer=this.value });
+  $('#pos-pay').addEventListener('change',function(){ posPay=this.value });
+  var pd=$('#pos-disc'); if(pd) pd.addEventListener('change',function(){ posDiscount=num(this.value); renderCart(); });
+  $('#pos-clear').onclick=function(){ cart=[]; posDiscount=0; posCustomer=''; renderCart(); toast('Cart cleared'); };
+  $('#pos-complete').onclick=completeSale;
+}
+function completeSale(){
+  if(!can('sale')){ toast('Aap ko sale ki ijazat nahi','err'); return; }
+  if(!cart.length){ toast('Cart is empty','warn'); return; }
+  for(var i=0;i<cart.length;i++){
+    if(num(cart[i].units)>stockOf(cart[i].medId)){ toast('Not enough stock for '+cart[i].name,'err'); return; }
+  }
+  var items=[];
+  cart.forEach(function(it){
+    var m=medById(it.medId)||{};
+    var need=num(it.units);
+    var total=lineAmount(m,need);
+    var perUnit=need>0? total/need : num(m.price);
+    var unitCost=medCost(m);
+    var batches=DB.batches.filter(function(b){return b.medId===it.medId && num(b.qty)>0})
+      .sort(function(a,b){return String(a.expiry||'9999-99').localeCompare(String(b.expiry||'9999-99'))});
+    batches.forEach(function(b){
+      if(need<=0) return;
+      var take=Math.min(need,num(b.qty));
+      b.qty=num(b.qty)-take; need-=take;
+      items.push({medId:it.medId,name:it.name,batchId:b.id,batchNo:b.batchNo||'',expiry:b.expiry||'',
+        qty:take,price:perUnit,amount:Math.round(take*perUnit*100)/100,cost:unitCost,
+        unit:unitName(m),packSize:packSizeOf(m),packName:packName(m)});
+    });
+    if(need>0){
+      items.push({medId:it.medId,name:it.name,batchId:'',batchNo:'',expiry:'',
+        qty:need,price:perUnit,amount:Math.round(need*perUnit*100)/100,cost:unitCost,
+        unit:unitName(m),packSize:packSizeOf(m),packName:packName(m)});
+    }
+  });
+  var t=cartTotals();
+  var u=currentUser();
+  var sale={
+    id:uid(), invoiceNo:nextInvoiceNo(), date:new Date().toISOString(),
+    userId:u.id, userName:u.name, role:u.role,
+    customerName:posCustomer.trim(), payment:posPay,
+    items:items, subtotal:t.sub, discount:t.disc, tax:t.tax, total:t.total
+  };
+  DB.sales.push(sale);
+  DB.counters.invoice=num(DB.counters.invoice)+1;
+  logEvent('sale','Bill '+sale.invoiceNo+' · '+money(sale.total)+' · '+items.length+' line(s)');
+  persist();
+  cart=[]; posDiscount=0; posCustomer='';
+  showReceipt(sale.id,true);
+  render();
+}
+function receiptHTML(s){
+  var st=DB.settings;
+  var h='<div class="rcpt">';
+  h+='<h3>'+esc(st.shopName||'Pharmacy')+'</h3>';
+  if(st.address) h+='<div class="c">'+esc(st.address)+'</div>';
+  if(st.phone) h+='<div class="c">Tel: '+esc(st.phone)+'</div>';
+  if(st.licenseNo) h+='<div class="c">Lic: '+esc(st.licenseNo)+'</div>';
+  h+='<hr><table><tr><td>Invoice: '+esc(s.invoiceNo)+'</td><td class="r">'+fmtDT(s.date)+'</td></tr>'+
+     '<tr><td>Customer: '+esc(s.customerName||'Walk-in')+'</td><td class="r">'+esc(s.payment||'Cash')+'</td></tr></table><hr>';
+  h+='<table>';
+  s.items.forEach(function(i){
+    var amount=(i.amount!=null?num(i.amount):num(i.qty)*num(i.price));
+    h+='<tr><td colspan="2">'+esc(i.name)+(i.batchNo?' <span style="font-size:11px">['+esc(i.batchNo)+']</span>':'')+'</td></tr>'+
+       '<tr><td style="padding-left:8px">'+esc(fmtQty(i,i.qty))+' x '+num(i.price).toFixed(2)+'</td><td class="r">'+amount.toFixed(2)+'</td></tr>';
+  });
+  h+='</table><hr>';
+  h+='<table><tr><td>Subtotal</td><td class="r">'+num(s.subtotal).toFixed(2)+'</td></tr>';
+  if(num(s.discount)>0) h+='<tr><td>Discount</td><td class="r">-'+num(s.discount).toFixed(2)+'</td></tr>';
+  if(num(s.tax)>0) h+='<tr><td>Tax</td><td class="r">'+num(s.tax).toFixed(2)+'</td></tr>';
+  h+='<tr><td><strong>TOTAL</strong></td><td class="r"><strong>'+esc(DB.settings.currency)+' '+num(s.total).toFixed(2)+'</strong></td></tr></table>';
+  h+='<hr><div class="c">'+esc(st.receiptNote||'')+'</div>';
+  h+='<div class="c" style="font-size:11px;margin-top:6px">Powered by PharmaTrace Pro</div>';
+  h+='</div>';
+  return h;
+}
+function showReceipt(saleId,afterSale){
+  var s=DB.sales.find(function(x){return x.id===saleId});
+  if(!s){ toast('Sale not found','err'); return; }
+  modal('Invoice '+s.invoiceNo,
+    '<div style="background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px">'+receiptHTML(s)+'</div>',
+    function(root){
+      var bar=document.createElement('div');
+      bar.className='row'; bar.style.marginTop='14px';
+      bar.innerHTML='<button class="btn" data-print>Print / Save PDF</button>'+
+        (afterSale?'<button class="btn ghost" data-close>Done</button>':'<button class="btn ghost" data-close>Close</button>');
+      root.querySelector('.modal-body').appendChild(bar);
+      bar.querySelector('[data-print]').onclick=function(){
+        $('#print-area').innerHTML=receiptHTML(s);
+        window.print();
+      };
+      $$('[data-close]',bar).forEach(function(b){ b.onclick=closeModal });
+    });
+}
+
+/* =========================================================
+   INVENTORY
+   ========================================================= */
+var invQ='';
+function invHTML(){
+  var term=(invQ||'').toLowerCase().trim();
+  var list=DB.medicines.slice().sort(function(a,b){return String(a.name).localeCompare(String(b.name))})
+    .filter(function(m){
+      if(!term) return true;
+      return (m.name||'').toLowerCase().indexOf(term)>=0
+        || (m.generic||'').toLowerCase().indexOf(term)>=0
+        || (m.company||'').toLowerCase().indexOf(term)>=0;
+    });
+  var h='<div class="wrap">';
+  h+='<div class="page-head"><h2>Inventory</h2>'+
+     '<div class="row"><button class="btn'+(can('fullInventory')?' ghost':'')+'" data-act="add-stock">+ Stock in</button>'+
+     (can('fullInventory')?'<button class="btn" data-act="add-med">+ Add medicine</button>':'')+'</div></div>';
+  h+='<div class="card" style="margin-bottom:14px"><div class="row">'+
+     '<input id="inv-q" class="in" style="flex:1" placeholder="Search medicines…" value="'+esc(invQ)+'">'+
+     '<span class="muted small">'+list.length+' item'+(list.length===1?'':'s')+'</span></div></div>';
+  if(!list.length){
+    h+='<div class="card"><div class="empty">No medicines yet. Click <strong>Add medicine</strong> to begin.</div></div>';
+  }else{
+    h+='<div class="card"><div class="tbl-wrap"><table class="tbl"><thead><tr>'+
+      '<th>Medicine</th><th>Category</th><th class="right">Stock</th>'+
+      (can('fullInventory')?'<th class="right">Cost</th><th class="right">Margin</th>':'')+
+      '<th class="right">Price</th><th>Status</th><th class="right">Actions</th></tr></thead><tbody>';
+    list.forEach(function(m){
+      var st=stockOf(m.id), stt=stockStatus(m);
+      h+='<tr><td><strong>'+esc(m.name)+'</strong><div class="small muted">'+esc([m.generic,m.company].filter(Boolean).join(' · '))+'</div>'+
+        '<div class="small muted">'+esc(packHint(m))+'</div></td>'+
+        '<td class="small">'+esc(m.category||'-')+'</td>'+
+        '<td class="right"><strong>'+esc(fmtQty(m,st))+'</strong><div class="small muted">'+trimNum(st)+' '+esc(unitName(m))+(num(m.reorderLevel)>0?' · min '+esc(fmtQty(m,num(m.reorderLevel))):'')+'</div></td>'+
+        (can('fullInventory')?'<td class="right small">'+money(medCost(m))+'</td><td class="right small">'+num(medMargin(m))+'%</td>':'')+
+        '<td class="right small">'+money(m.price)+'</td>'+
+        '<td><span class="badge '+stt.cls+'">'+stt.text+'</span></td>'+
+        '<td class="right" style="white-space:nowrap">'+
+          (can('fullInventory')
+            ? '<button class="btn ghost sm" data-batches="'+m.id+'">Batches</button> '+
+              '<button class="btn ghost sm" data-edit="'+m.id+'">Edit</button> '+
+              '<button class="btn ghost sm" data-delmed="'+m.id+'">Del</button>'
+            : '<button class="btn ghost sm" data-act="add-stock" data-med="'+m.id+'">+ Stock</button>')+
+        '</td></tr>';
+    });
+    h+='</tbody></table></div></div>';
+  }
+  h+='</div>';
+  return h;
+}
+function invBind(){
+  var q=$('#inv-q');
+  if(q) q.addEventListener('input',function(){ invQ=q.value; render(); setTimeout(function(){var n=$('#inv-q'); if(n){n.focus(); n.setSelectionRange(n.value.length,n.value.length)}},0); });
+}
+function medForm(med){
+  var m=med||{};
+  var cats=['Tablet','Capsule','Syrup','Suspension','Injection','Drops','Cream','Ointment','Sachet','Inhaler','Other'];
+  var html='<form id="med-form">'+
+    '<div class="two">'+
+    '<label class="fld"><span>Medicine name *</span><input class="in" name="name" required value="'+esc(m.name||'')+'" placeholder="e.g. Panadol 500mg"></label>'+
+    '<label class="fld"><span>Generic / salt</span><input class="in" name="generic" value="'+esc(m.generic||'')+'" placeholder="e.g. Paracetamol"></label>'+
+    '<label class="fld"><span>Company</span><input class="in" name="company" value="'+esc(m.company||'')+'" placeholder="e.g. GSK"></label>'+
+    '<label class="fld"><span>Category</span><select class="in" name="category">'+
+      cats.map(function(c){return '<option'+(m.category===c?' selected':'')+'>'+c+'</option>'}).join('')+'</select></label>'+
+    '<label class="fld"><span>Selling unit (loose)</span><input class="in" name="unit" value="'+esc(m.unit||'Tablet')+'" placeholder="Tablet, Capsule, Bottle"></label>'+
+    '<label class="fld"><span>Pack name</span><input class="in" name="packName" value="'+esc(m.packName||'Strip')+'" placeholder="Strip, Box, Bottle"></label>'+
+    '<label class="fld"><span>Units in one pack</span><input class="in" name="packSize" type="number" min="1" step="1" value="'+(m.packSize!=null?m.packSize:10)+'"><div class="small muted">e.g. 10 tablets in one strip</div></label>'+
+    '<label class="fld"><span>Pack price (optional)</span><input class="in" name="packPrice" type="number" step="0.01" min="0" value="'+(m.packPrice!=null?m.packPrice:'')+'"><div class="small muted">Blank = unit price x units</div></label>'+
+    '<label class="fld"><span>Barcode</span><input class="in" name="barcode" value="'+esc(m.barcode||'')+'"></label>'+
+    '<label class="fld"><span>Margin % (munafa)</span><input class="in" name="margin" type="number" min="0" max="95" step="0.5" value="'+(m.margin!=null?m.margin:num(DB.settings.defaultMargin))+'"><div class="small muted">Khali = default '+num(DB.settings.defaultMargin)+'%</div></label>'+
+    '<label class="fld"><span>Asli cost (optional)</span><input class="in" name="cost" type="number" step="0.01" min="0" value="'+(m.cost!=null?m.cost:'')+'"><div class="small muted">Sirf aap ki margin sheet ke liye</div></label>'+
+    '<label class="fld"><span>Sale price *</span><input class="in" name="price" type="number" step="0.01" min="0" required value="'+(m.price!=null?m.price:'')+'"></label>'+
+    '<label class="fld"><span>Low stock level</span><input class="in" name="reorderLevel" type="number" min="0" value="'+(m.reorderLevel!=null?m.reorderLevel:10)+'"></label>'+
+    '</div>'+
+    '<div class="row" style="margin-top:6px"><button class="btn" type="submit">'+(med?'Save changes':'Add medicine')+'</button>'+
+    '<button class="btn ghost" type="button" data-close>Cancel</button></div></form>';
+  modal(med?'Edit medicine':'Add medicine',html,function(root){
+    var f=root.querySelector('#med-form');
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var d={};
+      new FormData(f).forEach(function(v,k){d[k]=v});
+      if(!d.name.trim()){ toast('Name is required','err'); return; }
+      if(med){
+        Object.assign(med,{
+          name:d.name.trim(),generic:d.generic.trim(),company:d.company.trim(),
+          category:d.category,unit:d.unit.trim(),barcode:d.barcode.trim(),
+          packName:(d.packName||'Pack').trim(),packSize:Math.max(1,Math.floor(num(d.packSize))||1),
+          packPrice:num(d.packPrice),
+          cost:num(d.cost),price:num(d.price),reorderLevel:num(d.reorderLevel),
+          margin:(String(d.margin||'')===''?null:num(d.margin))
+        });
+        toast('Medicine updated','ok');
+      }else{
+        DB.medicines.push({
+          id:uid(),name:d.name.trim(),generic:d.generic.trim(),company:d.company.trim(),
+          category:d.category,unit:d.unit.trim(),barcode:d.barcode.trim(),
+          packName:(d.packName||'Pack').trim(),packSize:Math.max(1,Math.floor(num(d.packSize))||1),
+          packPrice:num(d.packPrice),
+          cost:num(d.cost),price:num(d.price),reorderLevel:num(d.reorderLevel),
+          margin:(String(d.margin||'')===''?null:num(d.margin)),
+          createdAt:new Date().toISOString()
+        });
+        toast('Medicine added','ok');
+      }
+      persist(); closeModal(); render();
+    });
+  },true);
+}
+function stockInForm(medId){
+  if(!can('stockIn')){ toast('Stock add karne ki ijazat nahi','err'); return; }
+  var full=can('fullInventory');
+  var meds=DB.medicines.slice().sort(function(a,b){return String(a.name).localeCompare(String(b.name))});
+  var html='<form id="stk-form">'+
+    '<label class="fld"><span>Medicine *</span><select class="in" name="medId">'+
+      '<option value="__new">+ Naya medicine (list mein nahi hai)</option>'+
+      meds.map(function(m){return '<option value="'+m.id+'"'+(m.id===medId?' selected':'')+'>'+esc(m.name)+(m.company?' — '+esc(m.company):'')+'</option>'}).join('')+
+    '</select></label>'+
+    '<div id="new-med-box" style="display:none;border-top:1px dashed var(--line);padding-top:10px;margin-top:4px">'+
+      '<div class="two">'+
+        '<label class="fld"><span>Medicine ka naam *</span><input class="in" name="newName" placeholder="Panadol 500mg"></label>'+
+        '<label class="fld"><span>Company</span><input class="in" name="newCompany" placeholder="GSK"></label>'+
+        '<label class="fld"><span>Category</span><input class="in" name="newCategory" placeholder="Tablet / Syrup"></label>'+
+        '<label class="fld"><span>Unit (loose)</span><input class="in" name="newUnit" value="Tablet"></label>'+
+        '<label class="fld"><span>Pack name</span><input class="in" name="newPackName" value="Strip"></label>'+
+        '<label class="fld"><span>Units per pack</span><input class="in" name="newPackSize" type="number" min="1" step="1" value="10"></label>'+
+      '</div>'+
+    '</div>'+
+    '<div class="two">'+
+      '<label class="fld"><span>Retail price *</span><input class="in" name="price" type="number" min="0" step="0.01" required>'+
+        (full?'':'<div class="small muted">Sirf retail price</div>')+'</label>'+
+      '<label class="fld"><span>Quantity *</span><div class="row">'+
+        '<input class="in" name="qty" type="number" min="1" step="1" required style="flex:1">'+
+        '<select class="in" name="qtyMode" style="max-width:140px"><option value="unit" id="stk-uo">Unit</option><option value="pack" id="stk-po">Pack</option></select>'+
+      '</div><div class="small muted" id="stk-qhint"></div></label>'+
+      '<label class="fld"><span>Batch number</span><input class="in" name="batchNo" placeholder="B-2291"></label>'+
+      '<label class="fld"><span>Expiry (month) *</span><input class="in" name="expiry" type="month" required></label>'+
+    '</div>'+
+    (full?'<label class="fld"><span>Cost per unit (optional)</span><input class="in" name="cost" type="number" min="0" step="0.01"><div class="small muted">Khali chhoro to margin se khud nikal jayega</div></label>':'')+
+    '<div class="row" style="margin-top:8px"><button class="btn" type="submit">Add to stock</button>'+
+    '<button class="btn ghost" type="button" data-close>Cancel</button></div></form>';
+  modal('Stock in',html,function(root){
+    var f=root.querySelector('#stk-form');
+    var sel=f.querySelector('[name=medId]'), mode=f.querySelector('[name=qtyMode]'),
+        qty=f.querySelector('[name=qty]'), price=f.querySelector('[name=price]'),
+        box=root.querySelector('#new-med-box'), qh=root.querySelector('#stk-qhint'),
+        hint=root.querySelector('#stk-hint');
+    function sync(){
+      var isNew=sel.value==='__new';
+      box.style.display=isNew?'block':'none';
+      var m=isNew?null:medById(sel.value);
+      var ps=isNew?Math.max(1,Math.floor(num(f.querySelector('[name=newPackSize]').value))||1):packSizeOf(m);
+      var un=isNew?(f.querySelector('[name=newUnit]').value||'unit'):unitName(m);
+      var pn=isNew?(f.querySelector('[name=newPackName]').value||'pack'):packName(m);
+      root.querySelector('#stk-uo').textContent=un;
+      root.querySelector('#stk-po').textContent=pn;
+      root.querySelector('#stk-po').disabled=(ps<=1);
+      if(ps<=1 && mode.value==='pack') mode.value='unit';
+      if(m){ price.value=num(m.price); price.disabled=!full; }
+      else { price.disabled=false; }
+      var q=Math.floor(num(qty.value));
+      qh.textContent = q>0 ? '= '+fmtQty({unit:un,packSize:ps,packName:pn}, mode.value==='pack'? q*ps : q) : '';
+    }
+    sel.addEventListener('change',sync); mode.addEventListener('change',sync);
+    qty.addEventListener('input',sync); price.addEventListener('input',sync);
+    f.querySelector('[name=newPackSize]').addEventListener('input',sync);
+    f.querySelector('[name=newUnit]').addEventListener('input',sync);
+    f.querySelector('[name=newPackName]').addEventListener('input',sync);
+    sync();
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var d={}; new FormData(f).forEach(function(v,k){d[k]=v});
+      var isNew=d.medId==='__new';
+      var mid=d.medId, m=null;
+      if(isNew){
+        if(!String(d.newName||'').trim()){ toast('Medicine ka naam likho','err'); return; }
+        if(!(num(d.price)>0)){ toast('Retail price likho','err'); return; }
+        m={id:uid(),name:String(d.newName).trim(),generic:'',company:String(d.newCompany||'').trim(),
+          category:String(d.newCategory||'Tablet').trim(),unit:String(d.newUnit||'Tablet').trim(),
+          packName:String(d.newPackName||'Strip').trim(),
+          packSize:Math.max(1,Math.floor(num(d.newPackSize))||1),
+          price:num(d.price),packPrice:0,margin:null,barcode:'',
+          reorderLevel:0,createdAt:new Date().toISOString(),createdBy:(currentUser()||{}).name||''};
+        DB.medicines.push(m); mid=m.id;
+      } else {
+        m=medById(mid);
+        if(!m){ toast('Medicine nahi mili','err'); return; }
+      }
+      var ps=packSizeOf(m);
+      var raw=Math.floor(num(d.qty));
+      var units=(d.qtyMode==='pack')? raw*ps : raw;
+      if(!d.expiry){ toast('Expiry month zaroori hai','err'); return; }
+      if(units<=0){ toast('Quantity 0 se zyada ho','err'); return; }
+      var cost = full && num(d.cost)>0 ? (d.qtyMode==='pack'? num(d.cost)/ps : num(d.cost)) : medCost(m);
+      DB.batches.push({id:uid(),medId:mid,batchNo:String(d.batchNo||'').trim(),expiry:d.expiry,
+        qty:units,cost:cost,addedAt:new Date().toISOString(),addedBy:(currentUser()||{}).name||''});
+      logEvent('stock-in',(m.name)+' +'+fmtQty(m,units)+' (batch '+(d.batchNo||'-')+')');
+      persist(); closeModal(); render();
+      toast(fmtQty(m,units)+' of '+m.name+' add ho gaya','ok');
+    });
+  },true);
+}
+
+/* ---------- my sales ---------- */
+function mySalesHTML(){
+  var u=currentUser();
+  var mine=DB.sales.filter(function(s){
+    if(u.role==='owner') return true;
+    return s.userId===u.id || (!s.userId && s.userName===u.name);
+  }).sort(function(a,b){return new Date(b.date)-new Date(a.date)});
+  var today=localDate(new Date());
+  var todayTotal=mine.filter(function(s){return localDate(s.date)===today})
+    .reduce(function(t,s){return t+num(s.total)},0);
+  var list=mine.slice(0,150);
+  var h='<div class="wrap">';
+  h+='<div class="page-head"><h2>'+(u.role==='owner'?'All Sales':'My Sales')+'</h2>'+
+     '<div class="muted small">Aaj: '+money(todayTotal)+' · total bills: '+mine.length+'</div></div>';
+  if(!list.length){ h+='<div class="card"><div class="empty">Abhi koi sale nahi hui.</div></div></div>'; return h; }
+  h+='<div class="card"><div class="tbl-wrap"><table class="tbl"><thead><tr>'+
+     '<th>Date</th><th>Invoice</th>'+(u.role==='owner'?'<th>Sold by</th>':'')+
+     '<th>Customer</th><th class="right">Items</th><th class="right">Total</th><th></th></tr></thead><tbody>';
+  list.forEach(function(s){
+    var n=s.items.reduce(function(t,i){return t+num(i.qty)},0);
+    h+='<tr><td class="small">'+esc(fmtDT(s.date))+'</td><td><strong>'+esc(s.invoiceNo)+'</strong></td>'+
+      (u.role==='owner'?'<td class="small">'+esc(s.userName||'-')+'</td>':'')+
+      '<td class="small">'+esc(s.customerName||'Walk-in')+'</td>'+
+      '<td class="right small">'+trimNum(n)+'</td><td class="right"><strong>'+money(s.total)+'</strong></td>'+
+      '<td class="right"><button class="btn ghost sm" data-receipt="'+s.id+'">View</button></td></tr>';
+  });
+  h+='</tbody></table></div></div></div>';
+  return h;
+}
+function batchesModal(medId){
+  var m=medById(medId); if(!m) return;
+  var bs=DB.batches.filter(function(b){return b.medId===medId})
+    .sort(function(a,b){return String(a.expiry||'').localeCompare(String(b.expiry||''))});
+  var html;
+  if(!bs.length){
+    html='<div class="empty">No stock batches for this medicine yet.</div>';
+  }else{
+    html='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Batch</th><th>Expiry</th><th class="right">Qty</th><th class="right">Cost</th><th>Status</th><th></th></tr></thead><tbody>'+
+      bs.map(function(b){
+        var e=expiryInfo(b.expiry);
+        return '<tr><td>'+esc(b.batchNo||'-')+'</td><td>'+monthLabel(b.expiry)+'</td><td class="right">'+num(b.qty)+'</td>'+
+          '<td class="right small">'+money(b.cost)+'</td><td><span class="badge '+e.cls+'">'+esc(e.text)+'</span></td>'+
+          '<td class="right"><button class="btn ghost sm" data-delbatch="'+b.id+'">Del</button></td></tr>';
+      }).join('')+'</tbody></table></div>'+
+      '<p class="small muted" style="margin:10px 0 0">Batches are consumed oldest-expiry-first when you make a sale.</p>';
+  }
+  modal('Batches — '+m.name,html,function(root){
+    $$('[data-delbatch]',root).forEach(function(btn){
+      btn.onclick=function(){
+        var id=btn.getAttribute('data-delbatch');
+        var b=DB.batches.find(function(x){return x.id===id});
+        if(!b) return;
+        if(!confirm('Delete batch '+(b.batchNo||'')+' with '+num(b.qty)+' units?')) return;
+        DB.batches=DB.batches.filter(function(x){return x.id!==id});
+        persist(); closeModal(); render(); toast('Batch deleted');
+      };
+    });
+  },true);
+}
+
+/* =========================================================
+   PURCHASES (stock in with supplier + record)
+   ========================================================= */
+var purSupplier='', purMed='', purBatch='', purExpiry='', purQty='', purCost='';
+function purHTML(){
+  var list=DB.purchases.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date)}).slice(0,60);
+  var meds=DB.medicines.slice().sort(function(a,b){return String(a.name).localeCompare(String(b.name))});
+  var h='<div class="wrap">';
+  h+='<div class="page-head"><h2>Purchases</h2><div class="muted small">Record stock coming in from suppliers</div></div>';
+  h+='<div class="grid2">';
+  h+='<div class="card"><h3 style="margin-bottom:10px">New purchase entry</h3>';
+  if(!meds.length){
+    h+='<div class="empty">Add medicines in Inventory first.</div>';
+  }else{
+    h+='<form id="pur-form">'+
+      '<div class="two">'+
+      '<label class="fld"><span>Supplier</span><input class="in" name="supplier" list="sup-list" value="'+esc(purSupplier)+'" placeholder="Supplier name"></label>'+
+      '<label class="fld"><span>Medicine *</span><select class="in" name="medId">'+
+        meds.map(function(m){return '<option value="'+m.id+'"'+(m.id===purMed?' selected':'')+'>'+esc(m.name)+'</option>'}).join('')+'</select></label>'+
+      '<label class="fld"><span>Batch number</span><input class="in" name="batchNo" value="'+esc(purBatch)+'"></label>'+
+      '<label class="fld"><span>Expiry *</span><input class="in" name="expiry" type="month" required value="'+esc(purExpiry)+'"></label>'+
+      '<label class="fld"><span>Quantity *</span><div class="row"><input class="in" name="qty" type="number" min="1" step="1" required value="'+esc(purQty)+'" style="flex:1">'+
+        '<select class="in" name="qtyMode" style="max-width:150px"><option value="unit">Units</option><option value="pack">Packs</option></select></div>'+
+        '<div class="small muted">Packs convert using the medicine pack size</div></label>'+
+      '<label class="fld"><span>Cost per unit *</span><input class="in" name="cost" type="number" min="0" step="0.01" required value="'+esc(purCost)+'"></label>'+
+      '</div>'+
+      '<datalist id="sup-list">'+DB.suppliers.map(function(s){return '<option value="'+esc(s.name)+'">'}).join('')+'</datalist>'+
+      '<button class="btn" type="submit">Save purchase &amp; add stock</button>'+
+    '</form>';
+  }
+  h+='</div>';
+  h+='<div class="card"><h3 style="margin-bottom:8px">Purchase history</h3>';
+  if(!list.length){ h+='<div class="empty">No purchases recorded yet.</div>'; }
+  else{
+    h+='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Date</th><th>Item</th><th>Supplier</th><th class="right">Qty</th><th class="right">Total</th></tr></thead><tbody>';
+    list.forEach(function(p){
+      h+='<tr><td class="small muted">'+fmtDate(p.date)+'</td><td>'+esc(p.medName)+'<div class="small muted">batch '+esc(p.batchNo||'-')+'</div></td>'+
+        '<td class="small">'+esc(p.supplier||'-')+'</td><td class="right">'+esc(fmtQty(medById(p.medId)||{unit:'unit'},p.qty))+'</td><td class="right">'+money(p.total)+'</td></tr>';
+    });
+    h+='</tbody></table></div>';
+  }
+  h+='</div></div></div>';
+  return h;
+}
+function purBind(){
+  var f=$('#pur-form'); if(!f) return;
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var d={}; new FormData(f).forEach(function(v,k){d[k]=v});
+    var m=medById(d.medId)||{}, ps=packSizeOf(m);
+    var raw=Math.floor(num(d.qty));
+    var qty=(d.qtyMode==='pack')? raw*ps : raw;
+    var cost=(d.qtyMode==='pack')? num(d.cost)/ps : num(d.cost);
+    if(qty<=0){ toast('Quantity must be more than 0','err'); return; }
+    if(!d.expiry){ toast('Expiry is required','err'); return; }
+    DB.batches.push({id:uid(),medId:d.medId,batchNo:(d.batchNo||'').trim(),expiry:d.expiry,qty:qty,cost:cost,addedAt:new Date().toISOString()});
+    DB.purchases.push({
+      id:uid(),date:new Date().toISOString(),supplier:d.supplier.trim(),
+      medId:d.medId,medName:m.name,batchNo:(d.batchNo||'').trim(),expiry:d.expiry,
+      qty:qty,qtyMode:d.qtyMode,packQty:raw,cost:cost,total:Math.round(qty*cost*100)/100
+    });
+    var supName=d.supplier.trim();
+    if(supName && !DB.suppliers.some(function(s){return s.name.toLowerCase()===supName.toLowerCase()})){
+      DB.suppliers.push({id:uid(),name:supName,phone:'',address:''});
+    }
+    purSupplier=supName; purMed=d.medId; purBatch=''; purExpiry=''; purQty=''; purCost='';
+    persist(); render(); toast('Purchase saved, stock updated','ok');
+  });
+}
+
+/* =========================================================
+   PARTIES (suppliers & customers)
+   ========================================================= */
+var partyTab='suppliers';
+function partyHTML(){
+  var isSup=partyTab==='suppliers';
+  var list=isSup?DB.suppliers:DB.customers;
+  var h='<div class="wrap">';
+  h+='<div class="page-head"><h2>Parties</h2><div class="row">'+
+     '<button class="chip '+(isSup?'active':'')+'" data-tab="suppliers">Suppliers ('+DB.suppliers.length+')</button>'+
+     '<button class="chip '+(!isSup?'active':'')+'" data-tab="customers">Customers ('+DB.customers.length+')</button></div></div>';
+  h+='<div class="grid2">';
+  h+='<div class="card"><h3 style="margin-bottom:10px">Add '+(isSup?'supplier':'customer')+'</h3>'+
+    '<form id="party-form">'+
+    '<label class="fld"><span>Name *</span><input class="in" name="name" required></label>'+
+    '<div class="two"><label class="fld"><span>Phone</span><input class="in" name="phone"></label>'+
+    '<label class="fld"><span>Address</span><input class="in" name="address"></label></div>'+
+    '<button class="btn" type="submit">Save</button></form></div>';
+  h+='<div class="card"><h3 style="margin-bottom:8px">'+(isSup?'Suppliers':'Customers')+'</h3>';
+  if(!list.length){ h+='<div class="empty">Nothing here yet.</div>'; }
+  else{
+    h+='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Name</th><th>Phone</th><th>Address</th><th></th></tr></thead><tbody>';
+    list.forEach(function(p){
+      h+='<tr><td><strong>'+esc(p.name)+'</strong></td><td class="small">'+esc(p.phone||'-')+'</td><td class="small muted">'+esc(p.address||'-')+'</td>'+
+        '<td class="right"><button class="btn ghost sm" data-delparty="'+p.id+'">Del</button></td></tr>';
+    });
+    h+='</tbody></table></div>';
+  }
+  h+='</div></div></div>';
+  return h;
+}
+function partyBind(){
+  $$('[data-tab]').forEach(function(b){ b.onclick=function(){ partyTab=b.getAttribute('data-tab'); render(); } });
+  var f=$('#party-form');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var d={}; new FormData(f).forEach(function(v,k){d[k]=v});
+    if(!d.name.trim()){ toast('Name is required','err'); return; }
+    var rec={id:uid(),name:d.name.trim(),phone:d.phone.trim(),address:d.address.trim()};
+    if(partyTab==='suppliers') DB.suppliers.push(rec); else DB.customers.push(rec);
+    persist(); render(); toast('Saved','ok');
+  });
+  $$('[data-delparty]').forEach(function(b){
+    b.onclick=function(){
+      var id=b.getAttribute('data-delparty');
+      if(!confirm('Delete this record?')) return;
+      if(partyTab==='suppliers') DB.suppliers=DB.suppliers.filter(function(x){return x.id!==id});
+      else DB.customers=DB.customers.filter(function(x){return x.id!==id});
+      persist(); render();
+    };
+  });
+}
+
+/* =========================================================
+   REPORTS
+   ========================================================= */
+var reportTab='sales', repFrom='', repTo='';
+function repRange(){
+  var today=localDate(new Date());
+  var from=repFrom||(today.slice(0,8)+'01');
+  var to=repTo||today;
+  return {from:from,to:to};
+}
+function salesInRange(from,to){
+  return DB.sales.filter(function(s){
+    var d=localDate(s.date);
+    return d>=from && d<=to;
+  }).sort(function(a,b){return new Date(b.date)-new Date(a.date)});
+}
+function repHTML(){
+  var r=repRange();
+  var list=salesInRange(r.from,r.to);
+  var gross=list.reduce(function(t,s){return t+num(s.total)},0);
+  var disc=list.reduce(function(t,s){return t+num(s.discount)},0);
+  var profit=list.reduce(function(t,s){return t+saleProfit(s)},0);
+  var h='<div class="wrap">';
+  h+='<div class="page-head"><h2>Reports</h2></div>';
+  h+='<div class="card" style="margin-bottom:14px"><div class="row">'+
+     '<label class="fld" style="margin:0"><span>From</span><input id="rep-from" class="in" type="date" value="'+esc(r.from)+'"></label>'+
+     '<label class="fld" style="margin:0"><span>To</span><input id="rep-to" class="in" type="date" value="'+esc(r.to)+'"></label>'+
+     '<div class="chips" style="margin-left:auto">'+
+     '<button class="chip" data-quick="today">Today</button>'+
+     '<button class="chip" data-quick="week">7 days</button>'+
+     '<button class="chip" data-quick="month">This month</button>'+
+     '<button class="chip" data-quick="all">All time</button></div></div></div>';
+  h+='<div class="cards">'+
+    card('Invoices',String(list.length),'in selected range')+
+    card('Sales total',money(gross),'including tax')+
+    card('Discount given',money(disc),'')+
+    card('Profit',money(profit),'after '+num(DB.settings.taxOnProfit||0.5)+'% tax')+
+  '</div>';
+  h+='<div class="chips" style="margin-bottom:12px">'+
+    ['sales','expiry','low','valuation','top'].map(function(k){
+      var lbl={sales:'Sales',expiry:'Expiry',low:'Low stock',valuation:'Stock value',top:'Top items'}[k];
+      return '<button class="chip '+(reportTab===k?'active':'')+'" data-rtab="'+k+'">'+lbl+'</button>';
+    }).join('')+'</div>';
+
+  h+='<div class="card">';
+  if(reportTab==='sales'){
+    if(!list.length){ h+='<div class="empty">No sales in this range.</div>'; }
+    else{
+      h+='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Items</th><th>Payment</th><th class="right">Discount</th><th class="right">Total</th><th class="right">Profit</th><th></th></tr></thead><tbody>';
+      list.forEach(function(s){
+        h+='<tr><td><strong>'+esc(s.invoiceNo)+'</strong></td><td class="small muted">'+fmtDT(s.date)+'</td>'+
+          '<td>'+esc(s.customerName||'Walk-in')+'</td><td class="small">'+s.items.length+'</td>'+
+          '<td class="small">'+esc(s.payment||'Cash')+'</td><td class="right small">'+money(s.discount)+'</td>'+
+          '<td class="right"><strong>'+money(s.total)+'</strong></td><td class="right small">'+money(saleProfit(s))+'</td>'+
+          '<td class="right"><button class="btn ghost sm" data-receipt="'+s.id+'">View</button></td></tr>';
+      });
+      h+='</tbody></table></div>';
+    }
+  }else if(reportTab==='expiry'){
+    var bs=DB.batches.filter(function(b){return num(b.qty)>0})
+      .sort(function(a,b){return String(a.expiry||'9999').localeCompare(String(b.expiry||'9999'))});
+    if(!bs.length){ h+='<div class="empty">No stock batches.</div>'; }
+    else{
+      h+='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Medicine</th><th>Batch</th><th>Expiry</th><th class="right">Qty</th><th>Status</th></tr></thead><tbody>';
+      bs.forEach(function(b){
+        var m=medById(b.medId), e=expiryInfo(b.expiry);
+        h+='<tr><td>'+esc(m?m.name:'(deleted)')+'</td><td class="small">'+esc(b.batchNo||'-')+'</td><td>'+monthLabel(b.expiry)+'</td>'+
+          '<td class="right">'+esc(fmtQty(m||{unit:'unit'},b.qty))+'</td><td><span class="badge '+e.cls+'">'+esc(e.text)+'</span></td></tr>';
+      });
+      h+='</tbody></table></div>';
+    }
+  }else if(reportTab==='low'){
+    var lows=DB.medicines.map(function(m){return {m:m,st:stockOf(m.id)}})
+      .filter(function(x){ var re=num(x.m.reorderLevel); return x.st<=0 || (re>0 && x.st<=re) });
+    if(!lows.length){ h+='<div class="empty">Nothing needs reordering. Nice.</div>'; }
+    else{
+      h+='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Medicine</th><th>Company</th><th class="right">Stock</th><th class="right">Min level</th><th class="right">Suggested order</th></tr></thead><tbody>';
+      lows.forEach(function(x){
+        var re=num(x.m.reorderLevel)||10;
+        var suggest=Math.max(re*2-x.st,re);
+        h+='<tr><td><strong>'+esc(x.m.name)+'</strong><div class="small muted">'+esc(packHint(x.m))+'</div></td><td class="small">'+esc(x.m.company||'-')+'</td>'+
+          '<td class="right">'+esc(fmtQty(x.m,x.st))+'</td><td class="right small">'+esc(fmtQty(x.m,re))+'</td><td class="right">'+esc(fmtQty(x.m,suggest))+'</td></tr>';
+      });
+      h+='</tbody></table></div>';
+    }
+  }else if(reportTab==='valuation'){
+    var rows=DB.medicines.map(function(m){
+      var bss=DB.batches.filter(function(b){return b.medId===m.id});
+      var qty=bss.reduce(function(t,b){return t+num(b.qty)},0);
+      var cost=bss.reduce(function(t,b){return t+num(b.qty)*num(b.cost)},0);
+      var retail=lineAmount(m,qty);
+      return {m:m,qty:qty,cost:cost,retail:retail};
+    }).filter(function(x){return x.qty>0});
+    var tc=rows.reduce(function(t,x){return t+x.cost},0), tr=rows.reduce(function(t,x){return t+x.retail},0);
+    h+='<p class="muted small" style="margin:0 0 8px">Total cost value <strong>'+money(tc)+'</strong> &middot; expected sale value <strong>'+money(tr)+'</strong> &middot; potential margin <strong>'+money(tr-tc)+'</strong></p>';
+    if(!rows.length){ h+='<div class="empty">No stock on hand.</div>'; }
+    else{
+      h+='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Medicine</th><th class="right">Qty</th><th class="right">Cost value</th><th class="right">Sale value</th><th class="right">Margin</th></tr></thead><tbody>';
+      rows.sort(function(a,b){return b.cost-a.cost}).forEach(function(x){
+        h+='<tr><td>'+esc(x.m.name)+'<div class="small muted">'+esc(packHint(x.m))+'</div></td><td class="right">'+esc(fmtQty(x.m,x.qty))+'</td><td class="right">'+money(x.cost)+'</td>'+
+          '<td class="right">'+money(x.retail)+'</td><td class="right">'+money(x.retail-x.cost)+'</td></tr>';
+      });
+      h+='</tbody></table></div>';
+    }
+  }else{
+    var agg={};
+    list.forEach(function(s){
+      s.items.forEach(function(i){
+        if(!agg[i.medId]) agg[i.medId]={medId:i.medId,name:i.name,qty:0,amount:0};
+        agg[i.medId].qty+=num(i.qty);
+        agg[i.medId].amount+=(i.amount!=null?num(i.amount):num(i.qty)*num(i.price));
+      });
+    });
+    var arr=Object.keys(agg).map(function(k){return agg[k]}).sort(function(a,b){return b.qty-a.qty}).slice(0,50);
+    if(!arr.length){ h+='<div class="empty">No items sold in this range.</div>'; }
+    else{
+      h+='<div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Medicine</th><th class="right">Qty sold</th><th class="right">Amount</th></tr></thead><tbody>';
+      arr.forEach(function(x,i){
+        h+='<tr><td class="muted">'+(i+1)+'</td><td>'+esc(x.name)+'</td><td class="right">'+esc(fmtQty(medById(x.medId)||{unit:'unit'},x.qty))+'</td><td class="right">'+money(x.amount)+'</td></tr>';
+      });
+      h+='</tbody></table></div>';
+    }
+  }
+  h+='</div></div>';
+  return h;
+}
+function repBind(){
+  var f=$('#rep-from'), t=$('#rep-to');
+  if(f) f.addEventListener('change',function(){ repFrom=f.value; render(); });
+  if(t) t.addEventListener('change',function(){ repTo=t.value; render(); });
+  $$('[data-quick]').forEach(function(b){
+    b.onclick=function(){
+      var k=b.getAttribute('data-quick'), today=localDate(new Date());
+      if(k==='today'){ repFrom=today; repTo=today; }
+      if(k==='week'){ var d=new Date(); d.setDate(d.getDate()-6); repFrom=localDate(d); repTo=today; }
+      if(k==='month'){ repFrom=today.slice(0,8)+'01'; repTo=today; }
+      if(k==='all'){ repFrom='2000-01-01'; repTo=today; }
+      render();
+    };
+  });
+  $$('[data-rtab]').forEach(function(b){ b.onclick=function(){ reportTab=b.getAttribute('data-rtab'); render(); } });
+}
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+function setHTML(){
+  var s=DB.settings;
+  var h='<div class="wrap">';
+  h+='<div class="page-head"><h2>Settings</h2></div>';
+  h+='<div class="grid2">';
+  h+='<div class="card"><h3 style="margin-bottom:10px">Shop details</h3><form id="set-form">'+
+    '<label class="fld"><span>Pharmacy name</span><input class="in" name="shopName" value="'+esc(s.shopName)+'"></label>'+
+    '<div class="two">'+
+    '<label class="fld"><span>License number</span><input class="in" name="licenseNo" value="'+esc(s.licenseNo)+'"></label>'+
+    '<label class="fld"><span>Phone</span><input class="in" name="phone" value="'+esc(s.phone)+'"></label>'+
+    '</div>'+
+    '<label class="fld"><span>Address</span><input class="in" name="address" value="'+esc(s.address)+'"></label>'+
+    '<div class="two">'+
+    '<label class="fld"><span>Currency symbol</span><input class="in" name="currency" value="'+esc(s.currency)+'"></label>'+
+    '<label class="fld"><span>Tax %</span><input class="in" name="taxPercent" type="number" min="0" step="0.01" value="'+num(s.taxPercent)+'"></label>'+
+    '<label class="fld"><span>Expiry warning (days)</span><input class="in" name="expiryWarnDays" type="number" min="1" value="'+num(s.expiryWarnDays)+'"></label>'+
+    '<label class="fld"><span>Default margin %</span><input class="in" name="defaultMargin" type="number" min="0" max="95" step="0.5" value="'+num(s.defaultMargin)+'"><div class="small muted">Retail ka kitna hissa munafa hai</div></label>'+
+    '<label class="fld"><span>Profit tax %</span><input class="in" name="taxOnProfit" type="number" min="0" max="50" step="0.1" value="'+num(s.taxOnProfit)+'"><div class="small muted">Munafe par lagne wala tax (0.5%)</div></label>'+
+    '</div>'+
+    '<label class="fld"><span>Receipt footer note</span><input class="in" name="receiptNote" value="'+esc(s.receiptNote)+'"></label>'+
+    '<button class="btn" type="submit">Save settings</button></form></div>';
+
+  h+='<div class="card"><h3 style="margin-bottom:10px">Your data</h3>'+
+    '<p class="small muted" style="margin-top:0">Everything is saved inside this browser on this device. Nothing is uploaded. Take a backup regularly and keep the file somewhere safe.</p>'+
+    '<div class="row" style="margin-bottom:12px">'+
+    '<button class="btn" id="btn-backup">Download backup</button>'+
+    '<button class="btn ghost" id="btn-restore">Restore backup</button>'+
+    '<input type="file" id="file-restore" accept="application/json,.json" style="display:none">'+
+    '</div>'+
+    '<div class="hint" style="margin-bottom:12px">Data on this device: '+DB.medicines.length+' medicines &middot; '+DB.sales.length+' sales &middot; '+DB.batches.length+' batches</div>'+
+    '<div class="row">'+
+    '<button class="btn ghost" id="btn-demo">Load demo data</button>'+
+    '<button class="btn danger" id="btn-reset">Erase all data</button>'+
+    '</div>'+
+    '<p class="small muted" style="margin:14px 0 0">How to use offline: keep this HTML file on your computer (or phone) and open it with any browser. It needs no internet, no install and no login.</p>'+
+    '</div>';
+
+  h+='</div></div>';
+  return h;
+}
+function setBind(){
+  var f=$('#set-form');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var d={}; new FormData(f).forEach(function(v,k){d[k]=v});
+    DB.settings.shopName=d.shopName.trim()||'My Pharmacy';
+    DB.settings.licenseNo=d.licenseNo.trim();
+    DB.settings.phone=d.phone.trim();
+    DB.settings.address=d.address.trim();
+    DB.settings.currency=d.currency.trim()||'PKR';
+    DB.settings.taxPercent=num(d.taxPercent);
+    DB.settings.expiryWarnDays=num(d.expiryWarnDays)||90;
+    DB.settings.defaultMargin=num(d.defaultMargin);
+    DB.settings.taxOnProfit=num(d.taxOnProfit);
+    DB.settings.receiptNote=d.receiptNote;
+    persist(); render(); toast('Settings saved','ok');
+  });
+  $('#btn-backup').onclick=function(){
+    var blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+    var a=document.createElement('a');
+    var stamp=localDate(new Date());
+    a.href=URL.createObjectURL(blob);
+    a.download='pharmatrace-backup-'+stamp+'.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+    toast('Backup downloaded','ok');
+  };
+  $('#btn-restore').onclick=function(){ $('#file-restore').click() };
+  $('#file-restore').onchange=function(e){
+    var file=e.target.files[0]; if(!file) return;
+    var fr=new FileReader();
+    fr.onload=function(){
+      try{
+        var d=JSON.parse(fr.result);
+        if(!d || !Array.isArray(d.medicines)) throw new Error('bad file');
+        if(!confirm('Replace all current data with this backup?')) return;
+        DB=Object.assign(blankDB(),d,{settings:Object.assign(blankDB().settings,d.settings||{})});
+        persist(); render(); toast('Backup restored','ok');
+      }catch(err){ toast('That file is not a valid PharmaTrace backup','err'); }
+    };
+    fr.readAsText(file);
+  };
+  $('#btn-demo').onclick=function(){
+    if(DB.medicines.length && !confirm('Add demo medicines on top of your current data?')) return;
+    seedDemo(); render(); toast('Demo data loaded','ok');
+  };
+  $('#btn-reset').onclick=function(){
+    if(!confirm('This deletes ALL medicines, stock, sales and purchases on this device. Continue?')) return;
+    if(!confirm('Really erase everything? This cannot be undone.')) return;
+    DB=blankDB(); persist(); render(); toast('All data erased');
+  };
+}
+function addMonths(n){
+  var d=new Date();
+  d.setDate(1);
+  d.setMonth(d.getMonth()+n);
+  return d.getFullYear()+'-'+pad(d.getMonth()+1);
+}
+function seedDemo(){
+  var demo=[
+    {name:'Panadol 500mg',generic:'Paracetamol',company:'GSK',category:'Tablet',unit:'Tablet',packName:'Strip',packSize:10,price:2.5,packPrice:22,cost:1.8,reorderLevel:100,qty:200,exp:14},
+    {name:'Augmentin 625mg',generic:'Amoxicillin + Clavulanate',company:'GSK',category:'Tablet',unit:'Tablet',packName:'Strip',packSize:6,price:42,packPrice:240,cost:34,reorderLevel:40,qty:60,exp:9},
+    {name:'Risek 20mg',generic:'Omeprazole',company:'Getz',category:'Capsule',unit:'Capsule',packName:'Strip',packSize:14,price:18,packPrice:230,cost:13,reorderLevel:60,qty:90,exp:20},
+    {name:'Brufen 400mg',generic:'Ibuprofen',company:'Abbott',category:'Tablet',unit:'Tablet',packName:'Strip',packSize:10,price:6,packPrice:55,cost:4,reorderLevel:80,qty:150,exp:2},
+    {name:'Ventolin Inhaler',generic:'Salbutamol',company:'GSK',category:'Inhaler',unit:'Inhaler',packName:'Box',packSize:1,price:520,packPrice:0,cost:430,reorderLevel:5,qty:8,exp:16},
+    {name:'ORS Sachet',generic:'Oral rehydration salts',company:'Hilton',category:'Sachet',unit:'Sachet',packName:'Box',packSize:10,price:25,packPrice:240,cost:17,reorderLevel:30,qty:40,exp:11}
+  ];
+  demo.forEach(function(d,i){
+    var id=uid();
+    DB.medicines.push({
+      id:id,name:d.name,generic:d.generic,company:d.company,category:d.category,
+      unit:d.unit,packName:d.packName,packSize:d.packSize,packPrice:d.packPrice,
+      barcode:'',price:d.price,cost:d.cost,reorderLevel:d.reorderLevel,
+      createdAt:new Date().toISOString()
+    });
+    DB.batches.push({
+      id:uid(),medId:id,batchNo:'B-'+(1000+i),expiry:addMonths(d.exp),
+      qty:d.qty,cost:d.cost,addedAt:new Date().toISOString()
+    });
+  });
+  DB.suppliers.push({id:uid(),name:'Muller & Phipps',phone:'021-111-222-333',address:'Karachi'});
+  DB.suppliers.push({id:uid(),name:'Umar Pharmacy Depot',phone:'0300-1234567',address:'Lahore'});
+  persist();
+}
+
+/* =========================================================
+   OFFLINE ASSISTANT  (no internet, no external service)
+   ========================================================= */
+var CHAT_KEY='pharmatrace_chat_v1';
+var chat=[];
+try{ chat=JSON.parse(localStorage.getItem(CHAT_KEY)||'[]')||[] }catch(e){ chat=[] }
+
+var ASK_SUGGEST=['Aaj ki sale','Low stock kaun si hai','Expiry report','Backup lo','Naya bill banao','Loose goli kaise bechun','Report kaise dekhu','Mera data kahan save hai','Kya kya kar sakte ho'];
+
+var KB=[
+ {q:'Naya medicine kaise add karun?',k:['medicine','add','naya','dawai','dawa','item','inventory','include','entry'],
+  a:'Inventory → "+ Add medicine". Naam, generic, company, category bharo.\nPhir **pack** ki setting: pack ka naam (Strip/Box), ek pack mein kitni goli (jaise 10), aur pack price (optional).\nSave karo, phir "Stock in" se batch, expiry aur quantity daal do.'},
+ {q:'Loose goli (tablet) kaise bechun?',k:['loose','goli','tablet','adhi','tor','torni','single','1','2','6','8','bechna','bechun','sell'],
+  a:'New Sale mein medicine par click karo — qty shuru mein 1 goli hoti hai.\n`+` se barhao, ya seedha qty box mein 6 / 8 / 13 likho. Ek click mein poora pack chahiye to **"+1 Strip"** dabao.\nCart khud dikhata hai: "1 Strip + 3 Tablet". Pack price set hai to poore pack par wohi rate lagega.'},
+ {q:'Pack size aur pack price kya hai?',k:['pack','size','strip','dabbi','dibbi','box','bottle','price','rate','kitni','goli'],
+  a:'**Pack size** = ek strip/box mein kitni goli (jaise 10). Isi se loose hisaab hota hai.\n**Pack price** = poore pack ka rate (jaise strip Rs 22). Khali chhoro to pack price = goli ka rate x pack size.\nFull pack bechne par pack price khud lag jata hai, loose goli par per-goli rate.'},
+ {q:'Stock in kaise karun?',k:['stock','in','batch','expiry','quantity','maal','aaya','add','karna'],
+  a:'Inventory → "+ Stock in" (ya us medicine ke "Batches").\nQuantity unit ya pack mein daal sakte ho — pack chuno to 3 strip likhne par 30 tablet add ho jayengi. Cost per unit/pack aur expiry month zaroor daalo.'},
+ {q:'Purchase entry kaise hoti hai?',k:['purchase','kharid','supplier','bill','entry','kharidari'],
+  a:'Purchases → "New purchase entry": supplier, medicine, batch number, expiry, quantity (pack ya unit) aur cost bharo.\nSave par stock khud barh jata hai aur purchase history mein record aa jata hai.'},
+ {q:'Discount kaise dun?',k:['discount','riayat','kam','chhoot','less'],
+  a:'New Sale ke totals box mein "Discount" field hai — rupees mein likho. Total usi waqt kam ho jata hai aur invoice par bhi nazar aata hai.'},
+ {q:'Tax kaise lagayen?',k:['tax','gst','percent','setting'],
+  a:'Settings → "Tax %" mein value daalo (jaise 5). Phir har sale par tax khud lagega aur invoice par alag line aayegi. Zero chhoro to tax nahi lagega.'},
+ {q:'Bill print ya PDF kaise karun?',k:['print','pdf','receipt','invoice','bill','nikalna','printer'],
+  a:'Sale complete karne par invoice khulta hai — "Print / Save PDF" dabao.\nPrint window mein printer ki jagah "Save as PDF" chuno to PDF file ban jayegi. Purani bill Reports → Sales se khol kar dobara print ho sakti hai.'},
+ {q:'Barcode se sale kaise hoti hai?',k:['barcode','scanner','scan','code'],
+  a:'New Sale mein bara box "Barcode ⏎" hai. Scanner wahan type karke Enter bhejta hai — item seedha cart mein aa jata hai.\nBarcode medicine form mein daalna zaroori hai.'},
+ {q:'Invoice number kaise badlega?',k:['invoice','number','no','counter','badalna'],
+  a:'Invoice number khud barhta hai (INV-00001, 00002...). Settings ke backup se pehle wala number sambhal kar rakho. Number manually badalne ka option filhaal nahi hai.'},
+ {q:'Medicine edit ya delete kaise karun?',k:['edit','delete','remove','hatana','badalna','change'],
+  a:'Inventory table mein har medicine ke saath **Edit** aur **Del** buttons hain.\nDelete karne par uski batches bhi chali jayengi, is liye pehle backup le lo. Purani sales safe rehti hain.'},
+ {q:'Supplier aur customer kaise add karun?',k:['supplier','customer','party','parties','client','grahak','dikandar'],
+  a:'Parties tab mein supplier ya customer ka naam, phone, address aur opening balance daal do. Sale/Purchase forms mein naam type karte hi list se mil jata hai.'},
+ {q:'Profit ka hisaab kaise hota hai?',k:['profit','munafa','nafa','faida','margin'],
+  a:'Profit = (item ka sale amount − us batch ka cost) − discount.\nHar batch ka apna cost hota hai, is liye Reports → Profit asli munafa dikhata hai. Sale ka cost usi batch se liya jata hai jo stock se nikla.'},
+ {q:'Report kaise dekhun?',k:['report','reports','hisab','summary','record','dekhu','dekhna'],
+  a:'Reports tab: date range chuno, phir Sales / Expiry / Low stock / Stock value / Top items.\nScreens par "Today", "7 days", "This month", "All time" shortcuts bhi hain.'},
+ {q:'Low stock kaise pata chalega?',k:['low','stock','kam','reorder','min','warn','alarm'],
+  a:'Har medicine mein "Reorder level" set karo (goli ke hisaab se). Stock us se kam ho to Dashboard par alert aata hai aur Reports → Low stock suggested order ke saath list deta hai.'},
+ {q:'Expiry ki yaad dehani kaise milegi?',k:['expiry','expire','date','kharab','warn','alert','din'],
+  a:'Settings → "Expiry warning days" (default 90). Itne din pehle wali batches Dashboard par laal nazar aati hain.\nSale karte waqt pehle expire hone wala batch pehle nikalta hai (FEFO).'},
+ {q:'Backup kaise lun?',k:['backup','bkp','save','safe','copy','export'],
+  a:'Settings → "Download backup" — ek JSON file ban jati hai, usay USB ya Drive par rakho.\nAssistant mein "backup lo" likhne se bhi wohi ho jata hai. Haftay mein aik baar backup lena achi aadat hai.'},
+ {q:'Backup wapas kaise restore karun?',k:['restore','wapas','import','recover','back','load'],
+  a:'Settings → "Restore backup" → apni JSON file chuno. Confirm karne par purana data replace ho jata hai.\nRestore se pehle mojooda data ka backup lena behtar hai.'},
+ {q:'Mera data kahan save hota hai?',k:['data','kahan','save','stored','local','storage','file','database'],
+  a:'Sab kuch isi PC ke browser storage (localStorage) mein rehta hai — koi internet, koi server nahi.\nIsi file aur isi browser se kholo to data wapas milega. Browser ka data clear karne se chala jayega, is liye backup zaroori hai.'},
+ {q:'Kya ye internet ke baghair chalega?',k:['offline','internet','net','online','connection','wifi','bina'],
+  a:'Haan, 100% offline. File mein koi bahar ka link, font ya script nahi hai. Internet band ho to bhi sab features — sale, report, print, assistant — chalte hain.'},
+ {q:'Mobile ya doosre PC par kaise chalaun?',k:['mobile','phone','android','doosre','pc','device','share','network'],
+  a:'Ye file kisi bhi PC/laptop par copy karke chal jati hai. Lekin data har device ka apna hota hai — transfer ke liye Settings se backup lo aur doosre device par restore kar do.'},
+ {q:'Password ya security hai?',k:['password','security','lock','protect','sirf','private'],
+  a:'Filhaal login/password nahi hai — file kholne wala sab dekh sakta hai. PC par Windows user password rakho aur backup ki copy safe rakho. Chahen to agla version mein PIN lock add kar sakta hoon.'},
+ {q:'Login aur roles kaise kaam karte hain?',k:['login','role','roles','user','users','employee','employee id','admin','subadmin','sub','sales','kaun','ijazat','permission','account'],
+  a:'Teen tarah ke login hain:\n• **Main Admin (aap)** — sab kuch: profit, margin, employees, reports, settings.\n• **Sub Admin** — sale + stock in. Retail price hi likhta hai, cost/margin/profit nahi dekh sakta.\n• **Sales** — sirf bill banata hai, retail price par. Apni sales history dekh sakta hai.\nEmployee ID aur password se login hota hai. Naye log Admin → Employees se banao.'},
+ {q:'Password bhool gaya / badalna hai',k:['password','bhool','forgot','reset','badalna','change','naya'],
+  a:'Password sirf **main admin** bana ya badal sakta hai: Admin → Employees → us employee ke aage **Password** button.\nAgar main admin ka hi password bhool jaye to data ko backup se restore karna parta hai — is liye admin password kahin likh kar safe rakho.'},
+ {q:'Margin 15% aur profit tax kaise chalta hai?',k:['margin','15','percent','profit','munafa','tax','0.5','hisaab','calculate','auto'],
+  a:'Retail price par margin khud lagta hai: retail 100 aur margin 15% to cost 85 aur munafa 15.\nMunafe par **0.5% tax** nikal kar net profit banta hai (Admin → Profit).\nHar medicine ka margin alag bhi set ho sakta hai — Admin → **Margin Sheet**. Sub admin ko sirf retail dikhta hai, margin ka andar ka hisaab nahi.'},
+ {q:'Kis ne kya becha / audit log',k:['audit','log','kis','ne','kya','becha','history','record','track','employee'],
+  a:'Har sale, stock in, login, password change aur block ka record rehta hai — **Admin → Audit Log**.\nAdmin → Profit tab mein "Kis ne kitna becha" employee ke hisaab se milta hai.'},
+ {q:'PC app ki tarah kaise kholun? (desktop shortcut)',k:['desktop','shortcut','icon','app','install','kholun','open','window','taskbar','pin'],
+  a:'Folder mein **"1 - Desktop App Banao.ps1"** file hai — us par right click → "Run with PowerShell". Ek dafa chalane se Desktop par "PharmaTrace Pro" ka icon ban jata hai, phir wohi se kholo to apni alag window mein app khulti hai (koi address bar nahi).\nSirf HTML par double click bhi kaam karta hai — app usi tarah chalegi, bas browser ke tab mein.'},
+ {q:'App ko update kaise karun?',k:['update','naya','version','upgrade','latest'],
+  a:'Nayi HTML file purani jagah replace kar do (same naam rakho) — data waisa hi rahega, kyunki data browser storage mein hai.\nAssistant mein "version" pooch kar dekh sakte ho ke kaunsa version chal raha hai. Update ke pehle backup lena behtar hai.'},
+ {q:'Return ya wapasi (refund) kaise karein?',k:['return','refund','wapasi','wapas','money back','cancel'],
+  a:'Filhaal sale return ka alag button nahi hai. Amal ye hai: us batch mein stock wapas add karo (Stock in se) aur sale ko report mein adjust kar lo.\nChahen to main proper return/refund screen aglay version mein bana sakta hoon.'},
+ {q:'App ke features kya hain?',k:['feature','features','kya','kar','sakta','list','kam'],
+  a:'**New Sale** (POS, loose goli, discount, tax, print), **Inventory** (batch + expiry + reorder), **Purchases**, **Parties**, **Reports** (sales, profit, expiry, low stock, valuation, top items), **Settings** (backup/restore) aur ye **Assistant** — sab offline.'},
+ {q:'Assistant kya kya kar sakta hai?',k:['assistant','bot','chatbot','help','madad','commands','kya kar'],
+  a:'Main aap ke data se jawab deta hoon aur kaam bhi karta hoon — sab isi PC par:\n• "aaj ki sale", "is mahine ka profit"\n• "Panadol ka stock", "Panadol ka rate"\n• "low stock", "expiry"\n• "Panadol ki 2 strip cart me dalo"\n• "backup lo", "naya bill", "reports kholo"\n• "kitni medicines hain", "version"\nSoftware ke baare mein kuch bhi poocho — kaise karna hai, sab bata dunga.'},
+ {q:'Sale ke waqt medicine kaise search karun?',k:['search','dhoond','find','talash','naam','name'],
+  a:'New Sale ke search box mein naam, generic ya company ka koi bhi hissa likho — list foran filter ho jati hai. Barcode scanner ho to barcode box istemal karo.'},
+ {q:'Payment method kaise chunun?',k:['payment','cash','card','easypaisa','jazzcash','adaigi','paisa'],
+  a:'Sale ke totals box mein payment ka dropdown hai (Cash, Card, Easypaisa, JazzCash, Credit). Jo chuno wohi invoice par chhap jata hai.'},
+ {q:'Shop ka naam bill par kaise aayega?',k:['shop','naam','name','header','receipt','dukan'],
+  a:'Settings → Shop name, license number, address aur phone bharo. Ye sab invoice ke top par chhap jata hai. Receipt ke neeche wala note bhi wahin se badalta hai.'},
+ {q:'Currency ya paisa badalna hai',k:['currency','rupay','rupees','pkr','paisa','symbol'],
+  a:'Settings → Currency (default PKR). Badalne par poori app aur invoice mein wohi currency dikhegi.'},
+ {q:'Demo data kaise load karun?',k:['demo','sample','test','example','practice'],
+  a:'Dashboard par "Load demo data" button hai — 6 medicines, batches aur sample sale aa jati hai practice ke liye.\nAsli kaam shuru karne se pehle Settings se backup le kar data clear kar sakte ho.'},
+ {q:'Sara data clear karna hai',k:['clear','delete all','reset','sab','khali','mitana'],
+  a:'Filhaal "clear all" ka button nahi hai (galti se data na jaye). Backup le kar naya folder/browser profile istemal karo, ya mujhe batao to main "reset" button add kar dun.'},
+ {q:'Purani bill dobara print kaise karun?',k:['purani','old','dobara','reprint','history','invoice list'],
+  a:'Reports → Sales tab mein range chuno, invoice par click karo — poori bill khul jayegi, wahin se Print/PDF ho jayegi.'},
+ {q:'Stock kam ya zyada ho gaya to theek kaise karun?',k:['adjust','correction','galti','mistake','stock','theek'],
+  a:'Inventory → us medicine ke "Batches" mein batch kholo aur quantity edit karo. Ya Stock in se adjustment entry kar do (cost same rakh kar).' },
+ {q:'Keyboard shortcuts hain?',k:['shortcut','keyboard','hotkey','key'],
+  a:'Filhaal sirf barcode box Enter leta hai. Chahen to main shortcuts add kar sakta hoon (F2 naya bill, F4 search, Esc close).'},
+ {q:'Urdu interface ho sakta hai?',k:['urdu','language','zaban','hindi'],
+  a:'Abhi interface English hai (Roman Urdu samajh li jati hai). Poora Urdu UI aglay version mein ban sakta hai — batao to bana dun.'},
+ {q:'Ye app kis ne banaya / version kya hai?',k:['version','kis','ne','banaya','about','v1','v2','v3'],
+  a:'PharmaTrace Pro — offline pharmacy manager. Aap ke liye Base44 Superagent ne banaya. Sab data aap ke PC par rehta hai; koi bahar ka connection nahi.'},
+ {q:'Naya bill shuru kaise karun?',k:['naya','bill','new','sale','shuru','start'],
+  a:'New Sale tab kholo (ya assistant mein "naya bill" likho). Invoice number khud agla ho jata hai. Cart khali hai to seedha naya bill hai.'},
+ {q:'Batch number zaroori hai?',k:['batch','number','zaroori','required','optional'],
+  a:'Batch number optional hai magar rakhna behtar hai — expiry aur purchase history usi se track hoti hai. Expiry month zaroori hai.'},
+ {q:'Ek hi dawai ke do rate kaise rakhein?',k:['rate','do','different','price','change','retail','wholesale'],
+  a:'Abhi ek sale price aur ek pack price hai. Do rate (retail/wholesale) chahiye to batao, main customer type ke hisaab se rate add kar sakta hoon.'}
+];
+
+var STOP={ki:1,ka:1,ke:1,ko:1,se:1,me:1,mein:1,hai:1,ha:1,hain:1,kya:1,ky:1,kaise:1,kaisay:1,karna:1,karo:1,kar:1,karay:1,karun:1,aur:1,ya:1,par:1,pe:1,ho:1,koi:1,the:1,is:1,it:1,to:1,of:1,for:1,how:1,do:1,a:1,an:1,mujhe:1,mujhay:1,batao:1,bata:1,plz:1,please:1,app:1,ab:1,ap:1,main:1,mera:1,meri:1,kuch:1,sakta:1,sakte:1,sakti:1,kro:1,chahiye:1,chahta:1};
+function norm(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim() }
+function toks(s){ return norm(s).split(' ').filter(function(t){return t.length>1 && !STOP[t]}) }
+function esc2(s){ return esc(s) }
+function fmtAnswer(txt){
+  var s=esc(String(txt));
+  s=s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  s=s.replace(/`(.+?)`/g,'<code style="background:#e2e8f0;padding:1px 4px;border-radius:4px">$1</code>');
+  return s.replace(/\n/g,'<br>');
+}
+function salesBetween(from,to){
+  return DB.sales.filter(function(s){ var d=localDate(s.date); return d>=from && d<=to });
+}
+function findMeds(q,limit){
+  var t=toks(q); if(!t.length) return [];
+  return DB.medicines.map(function(m){
+    var hay=norm([m.name,m.generic,m.company,String(m.barcode||'')].join(' '));
+    var s=0;
+    t.forEach(function(x){ if(hay.indexOf(x)>=0) s+=(x.length>3?3:2) });
+    return {m:m,s:s};
+  }).filter(function(x){return x.s>0}).sort(function(a,b){return b.s-a.s}).slice(0,limit||3).map(function(x){return x.m});
+}
+function medLine(m){
+  var st=stockOf(m.id);
+  var bs=DB.batches.filter(function(b){return b.medId===m.id && num(b.qty)>0})
+    .sort(function(a,b){return String(a.expiry||'9999').localeCompare(String(b.expiry||'9999'))});
+  var out='**'+m.name+'**';
+  if(m.generic||m.company) out+=' ('+[m.generic,m.company].filter(Boolean).join(' · ')+')';
+  out+='\nStock: **'+fmtQty(m,st)+'**';
+  if(packSizeOf(m)>1) out+='  ·  '+st+' '+unitName(m);
+  out+='\nRate: '+money(m.price)+' / '+unitName(m)+(num(m.packPrice)>0?'  ·  '+money(m.packPrice)+' / '+packName(m):'');
+  if(can('fullInventory')) out+='\nCost: '+money(medCost(m))+'  ·  margin '+medMargin(m)+'%';
+  if(bs.length) out+='\nNearest expiry: '+monthLabel(bs[0].expiry)+' (batch '+(bs[0].batchNo||'-')+')';
+  else out+='\nKoi batch stock mein nahi hai.';
+  return out;
+}
+function money0(v){ return money(Math.round(num(v)*100)/100) }
+
+function assistantReply(raw){
+  var t=norm(raw), T=toks(raw);
+  if(!raw || !raw.trim()) return {text:'Kuch likho to sahi :)'};
+
+  /* ---- greetings ---- */
+  if(/^(hi|hello|hey|salam|assalam|asalam|aoa|assalamualaikum|hy)\b/.test(t) || t==='hi')
+    return {text:'Assalam-o-Alaikum! Main aap ka offline assistant hoon — stock, sale, report ya software ke baare mein kuch bhi poocho.'};
+
+  /* ---- help ---- */
+  if(/\bhelp\b|\bcommands?\b|\bkya kar sakta\b|\bkya kar sakte\b|\bmadad\b/.test(t))
+    return {text:'Main ye sab kar sakta hoon (sab offline):\n• **Sale**: "aaj ki sale", "is mahine ki sale", "profit"\n• **Stock**: "Panadol ka stock", "Panadol ka rate", "low stock", "expiry"\n• **Kaam**: "Panadol ki 2 strip cart me dalo", "backup lo", "naya bill"\n• **Navigation**: "inventory kholo", "reports kholo", "settings kholo"\n• **Info**: "kitni medicines hain", "version"\nAur software ke baare mein koi bhi sawal — jaise "loose goli kaise bechun".'};
+
+  /* ---- version / status ---- */
+  if(/\bversion\b/.test(t) || /kitni medicine|kitni dawai|total item|count\b/.test(t)){
+    var stk=DB.batches.reduce(function(a,b){return a+num(b.qty)},0);
+    var val=DB.batches.reduce(function(a,b){return a+num(b.qty)*num(b.cost)},0);
+    return {text:'**PharmaTrace Pro v3** (offline)\nMedicines: '+DB.medicines.length+'  ·  Batches: '+DB.batches.length+'  ·  Total units: '+stk+
+      '\nSales saved: '+DB.sales.length+'  ·  Purchases: '+DB.purchases.length+
+      (can('fullInventory')?'\nStock value (cost): '+money0(val):'')+'\nData: isi PC ke browser storage mein, koi internet nahi.'};
+  }
+
+  /* ---- backup ---- */
+  if(/\bbackup\b|\bbkp\b/.test(t) && !/kaise|how|restore|wapas/.test(t)){
+    downloadBackup();
+    return {text:'Backup download ho gaya — JSON file aap ke Downloads folder mein hai. Usay USB ya Drive par safe rakho.'};
+  }
+
+  /* ---- navigation ---- */
+  var navMap=[['dashboard',/dashboard|home|main page/],['mysales',/my sales|meri sale|mere sale|history/],['sales',/sale|bill|pos|bech/],['inventory',/inventory|stock|medicine|dawai/],
+    ['purchases',/purchase|kharid|supplier bill/],['parties',/parties|party|customer|supplier|dikandar/],
+    ['reports',/report|hisab|summary/],['settings',/setting|backup|option/],['assistant',/assistant|chat/]];
+  if(/\bkholo\b|\bkhol\b|\bopen\b|\bjao\b|\bchalo\b|\bopen karo\b/.test(t)){
+    for(var i=0;i<navMap.length;i++){
+      if(navMap[i][1].test(t)){ goPage(navMap[i][0]); return {text:'Theek hai — '+navMap[i][0]+' khol diya.'}; }
+    }
+    return {text:'Kaunsa page kholun? Inventory, New Sale, Purchases, Parties, Reports ya Settings.'};
+  }
+  if(/logout|log out|sign out|bahar niklo|account band/.test(t)){
+    doLogout();
+    return {text:'Logout ho gaya.'};
+  }
+  if(/mere sale|meri sale|my sales|apni sale|apni bikri/.test(t)){
+    goPage('mysales');
+    return {text:'Aap ki sales history khol di.'};
+  }
+  if(/naya bill|new bill|naya sale|new sale|bill banao|sale shuru/.test(t)){
+    cart=[]; goPage('sales');
+    return {text:'Naya bill tayyar hai — search se medicine add karo. Invoice number khud agla hai.'};
+  }
+
+  /* ---- add to cart ---- */
+  if(/\bcart\b|\bbech do\b|\bbechdo\b|\bdal do\b|\bdaldo\b|\badd karo\b/.test(t)){
+    var um=t.match(/(\d+)\s*(goli|tablet|tab|capsule|cap|strip|pati|dabbi|dibbi|box|pack|btl|bottle)/);
+    var qty=um?+um[1]:1, isPack=um?/strip|pati|dabbi|dibbi|box|pack|btl|bottle/.test(um[2]):false;
+    var nameText=t.replace(/(\d+)\s*(goli|tablet|tab|capsule|cap|strip|pati|dabbi|dibbi|box|pack|btl|bottle)/g,' ')
+      .replace(/\b(cart|bill|me|mein|dal|dalo|add|karo|kar|do|bech|bechna|bechni|ka|ki|ko|ek|one|se|mein)\b/g,' ')
+      .replace(/\s+/g,' ').trim();
+    var found=findMeds(nameText,1);
+    if(!found.length) return {text:'Ye medicine nahi mili. Poora naam likho, jaise "Panadol ki 2 strip cart me dalo".'};
+    var m=found[0], ps=packSizeOf(m), units=isPack?qty*ps:qty;
+    var have=cart.filter(function(c){return c.medId===m.id})[0];
+    if(have) have.units=num(have.units)+units; else cart.push({medId:m.id,name:m.name,units:units});
+    goPage('sales');
+    return {text:'**'+m.name+'** — '+fmtQty(m,units)+' cart mein daal diya. Total ab '+money0(cartSubtotal())+'. Bill complete karna ho to "Complete sale" dabao.'};
+  }
+
+  /* ---- sales summaries ---- */
+  if(/\bsale\b|\bsales\b|\bbikri\b|\bkamai\b|\bprofit\b|\bmunafa\b|\bnafa\b/.test(t)){
+    var today=localDate(new Date()), month=today.slice(0,7);
+    var wantMonth=/mahine|month|monthly/.test(t);
+    var list=wantMonth? salesBetween(month+'-01',month+'-31') : salesBetween(today,today);
+    var gross=list.reduce(function(a,s){return a+num(s.total)},0);
+    var prof=list.reduce(function(a,s){return a+saleProfit(s)},0);
+    var items=list.reduce(function(a,s){return a+s.items.reduce(function(x,i){return x+num(i.qty)},0)},0);
+    var lbl=wantMonth?'Is mahine':'Aaj';
+    if(!list.length) return {text:lbl+' ki koi sale nahi hui abhi.'};
+    return {text:'**'+lbl+' ki sale**\nInvoices: '+list.length+'\nTotal: **'+money0(gross)+'**'+
+      (can('reports')?'\nProfit (after tax): '+money0(prof):'')+'\nItems sold: '+items+' units'};
+  }
+
+  /* ---- low stock ---- */
+  if(/low stock|stock kam|kam stock|reorder|khatam|out of stock/.test(t)){
+    var low=DB.medicines.map(function(m){
+      var st=stockOf(m.id), re=num(m.reorderLevel);
+      return {m:m,st:st,re:re};
+    }).filter(function(x){ return x.st<=0 || (x.re>0 && x.st<=x.re) })
+      .sort(function(a,b){ return (a.st-(a.re||0)) - (b.st-(b.re||0)) });
+    if(!low.length) return {text:'Zabardast — koi medicine low stock mein nahi hai.'};
+    var txt='**Low stock ('+low.length+')**\n'+low.slice(0,8).map(function(x){
+      return '• '+x.m.name+': '+(x.st<=0?'khatam':'sirf '+fmtQty(x.m,x.st))+(x.re>0?' (min '+fmtQty(x.m,x.re)+')':'');
+    }).join('\n');
+    if(low.length>8) txt+='\n… aur '+(low.length-8)+' mazeed.';
+    return {text:txt};
+  }
+
+  /* ---- expiry ---- */
+  if(/expiry|expire|kharab|expiring/.test(t)){
+    var wd=num(DB.settings.expiryWarnDays)||90;
+    var ex=DB.batches.filter(function(b){ var d=expiryInfo(b.expiry).days; return num(b.qty)>0 && d!==null && d<=wd })
+      .sort(function(a,b){return String(a.expiry).localeCompare(String(b.expiry))});
+    if(!ex.length) return {text:'Agle '+wd+' din mein koi batch expire nahi ho rahi.'};
+    var tx='**Expiry alert ('+wd+' din ke andar)**\n'+ex.slice(0,8).map(function(b){
+      var m=medById(b.medId)||{unit:'unit'};
+      return '• '+(m.name||'(deleted)')+' · '+monthLabel(b.expiry)+' · '+fmtQty(m,num(b.qty));
+    }).join('\n');
+    return {text:tx};
+  }
+
+  /* ---- stock / rate of a medicine ---- */
+  var med=findMeds(raw,3);
+  if(med.length){
+    if(med.length>1 && /\b(stock|rate|price|kitni|kitna)\b/.test(t)){
+      var best=med[0];
+      return {text:medLine(best)};
+    }
+    return {text:medLine(med[0])};
+  }
+
+  /* ---- knowledge base ---- */
+  var bestE=null,bestS=0;
+  KB.forEach(function(e){
+    var hay=norm(e.q+' '+e.k.join(' '));
+    var s=0;
+    T.forEach(function(x){
+      if(e.k.indexOf(x)>=0) s+=3;
+      else if(hay.indexOf(x)>=0) s+=(x.length>3?2:1);
+    });
+    if(s>bestS){ bestS=s; bestE=e; }
+  });
+  if(bestE && bestS>=3) return {text:bestE.a};
+
+  return {text:'Ye main theek se samajh nahi paya. Aise pooch kar dekho:\n'+ASK_SUGGEST.slice(0,5).map(function(x){return '• '+x}).join('\n')};
+}
+
+
+/* ---------- assistant UI ---------- */
+function goPage(r){ route=r; render(); }
+function downloadBackup(){
+  var blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  var stamp=localDate(new Date());
+  a.href=URL.createObjectURL(blob);
+  a.download='pharmatrace-backup-'+stamp+'.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+  toast('Backup downloaded','ok');
+}
+function saveChat(){ try{ localStorage.setItem(CHAT_KEY,JSON.stringify(chat.slice(-60))) }catch(e){} }
+function assistHTML(){
+  var h='<div class="wrap">';
+  h+='<div class="page-head"><h2>Assistant</h2><div class="muted small">100% offline · sirf aap ke data se jawab · koi internet nahi</div></div>';
+  h+='<div class="card">';
+  h+='<div id="chat-log" class="chat-log"></div>';
+  h+='<div id="chat-chips" class="chips" style="margin:12px 0 10px"></div>';
+  h+='<div class="row"><input id="chat-in" class="in" style="flex:1" placeholder="Poocho… jaise: aaj ki sale / Panadol ka stock / backup lo" autocomplete="off">'+
+     '<button class="btn" id="chat-send">Send</button>'+
+     '<button class="btn ghost" id="chat-clear">Clear</button></div>';
+  h+='<p class="small muted" style="margin:10px 0 0">Assistant software ke saare features janta hai, aur aap ke stock aur sale ka hisaab khud nikal kar batata hai. Sab kuch isi PC par hota hai.</p>';
+  h+='</div></div>';
+  return h;
+}
+function renderChat(){
+  var log=$('#chat-log'); if(!log) return;
+  var msgs=chat.slice(-40), h='';
+  if(!msgs.length){
+    h+='<div class="msg bot">'+fmtAnswer('Assalam-o-Alaikum! Main aap ka offline assistant hoon.\nSoftware ke baare mein kuch bhi poocho, ya seedha kaam bolo — jaise "aaj ki sale", "Panadol ka stock", "backup lo".')+'</div>';
+  }
+  msgs.forEach(function(m){ h+='<div class="msg '+m.who+'">'+fmtAnswer(m.text)+'</div>' });
+  log.innerHTML=h;
+  log.scrollTop=log.scrollHeight;
+}
+function sendChat(text){
+  text=String(text||'').trim(); if(!text) return;
+  chat.push({who:'user',text:text});
+  var r;
+  try{ r=assistantReply(text) }catch(err){ r={text:'Andar hi andar masla aa gaya: '+err.message} }
+  chat.push({who:'bot',text:r.text});
+  saveChat();
+  if(route==='assistant'){ renderChat(); var i=$('#chat-in'); if(i) i.focus(); }
+  else render();
+}
+function assistBind(){
+  renderChat();
+  var chips=$('#chat-chips');
+  chips.innerHTML=ASK_SUGGEST.map(function(s){return '<button class="chip" data-ask="'+esc(s)+'">'+esc(s)+'</button>'}).join('');
+  chips.onclick=function(e){ var b=e.target.closest('[data-ask]'); if(!b) return; sendChat(b.getAttribute('data-ask')) };
+  var inp=$('#chat-in');
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); sendChat(inp.value); inp.value=''; } });
+  $('#chat-send').onclick=function(){ sendChat(inp.value); inp.value=''; inp.focus(); };
+  $('#chat-clear').onclick=function(){ chat=[]; saveChat(); renderChat(); };
+  inp.focus();
+}
+
+/* =========================================================
+   ADMIN PANEL (owner only)
+   ========================================================= */
+var adminTab='users', adFrom='', adTo='';
+
+function adminHTML(){
+  if(!can('admin')) return '<div class="wrap"><div class="card"><div class="empty">Sirf main admin ke liye.</div></div></div>';
+  var h='<div class="wrap">';
+  h+='<div class="page-head"><h2>Admin Panel</h2><div class="muted small">Employees · margin · profit · audit</div></div>';
+  h+='<div class="admin-tabs">'+[['users','Employees'],['margins','Margin Sheet'],['profit','Profit'],['audit','Audit Log']]
+    .map(function(t){return '<button data-atab="'+t[0]+'" class="'+(adminTab===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')+'</div>';
+  if(adminTab==='users') h+=adminUsersHTML();
+  else if(adminTab==='margins') h+=adminMarginsHTML();
+  else if(adminTab==='profit') h+=adminProfitHTML();
+  else h+=adminAuditHTML();
+  h+='</div>';
+  return h;
+}
+function adminBind(){
+  $$('[data-atab]').forEach(function(b){ b.onclick=function(){ adminTab=b.getAttribute('data-atab'); render(); } });
+  if(adminTab==='users') adminUsersBind();
+  else if(adminTab==='margins') adminMarginsBind();
+  else if(adminTab==='profit') adminProfitBind();
+}
+
+/* ---- employees ---- */
+function adminUsersHTML(){
+  var h='<div class="card" style="margin-bottom:14px"><div class="row" style="justify-content:space-between;align-items:center">'+
+    '<div><h3 style="margin:0 0 2px">Employees</h3><div class="small muted">Sub admin = sale + stock in. Sales = sirf bill. Password sirf aap banate hain.</div></div>'+
+    '<button class="btn" data-uadd>+ Naya employee</button></div></div>';
+  h+='<div class="card"><div class="tbl-wrap"><table class="tbl"><thead><tr>'+
+    '<th>Naam</th><th>Employee ID</th><th>Role</th><th>Status</th><th>Last login</th><th class="right">Actions</th>'+
+    '</tr></thead><tbody>';
+  DB.users.forEach(function(u){
+    h+='<tr><td><strong>'+esc(u.name)+'</strong></td><td class="small">'+esc(u.empId)+'</td><td>'+roleTag(u.role)+'</td>'+
+      '<td><span class="badge '+(u.active?'ok':'danger')+'">'+(u.active?'Active':'Blocked')+'</span></td>'+
+      '<td class="small">'+(u.lastLogin?esc(fmtDT(u.lastLogin)):'-')+'</td>'+
+      '<td class="right" style="white-space:nowrap">'+
+        '<button class="btn ghost sm" data-upass="'+u.id+'">Password</button> '+
+        (u.role!=='owner'
+          ? '<button class="btn ghost sm" data-utoggle="'+u.id+'">'+(u.active?'Block':'Unblock')+'</button> '+
+            '<button class="btn ghost sm" data-udel="'+u.id+'">Del</button>'
+          : '<span class="small muted">—</span>')+
+      '</td></tr>';
+  });
+  h+='</tbody></table></div></div>';
+  return h;
+}
+function adminUsersBind(){
+  var add=$('[data-uadd]');
+  if(add) add.onclick=function(){
+    modal('Naya employee','<form id="u-form">'+
+      '<div class="two">'+
+      '<label class="fld"><span>Naam *</span><input class="in" name="name" required></label>'+
+      '<label class="fld"><span>Employee ID *</span><input class="in" name="empId" required placeholder="ali01"></label>'+
+      '<label class="fld"><span>Role *</span><select class="in" name="role"><option value="sales">Sales (sirf bill)</option><option value="subadmin">Sub Admin (sale + stock in)</option></select></label>'+
+      '<label class="fld"><span>Password *</span><input class="in" name="pass" type="password" required minlength="4"></label>'+
+      '</div><div class="err" id="u-err"></div>'+
+      '<div class="row"><button class="btn" type="submit">Ban jaye</button><button class="btn ghost" type="button" data-close>Cancel</button></div></form>',
+      function(root){
+        root.querySelector('#u-form').onsubmit=function(e){
+          e.preventDefault();
+          var d={}; new FormData(e.target).forEach(function(v,k){d[k]=v});
+          var key=String(d.empId).trim().toLowerCase();
+          if(DB.users.some(function(x){return String(x.empId).toLowerCase()===key})){ root.querySelector('#u-err').textContent='Ye Employee ID pehle se mojood hai'; return; }
+          var salt=newSalt();
+          DB.users.push({id:uid(),empId:String(d.empId).trim(),name:String(d.name).trim(),role:d.role,
+            salt:salt,hash:hashPass(d.pass,salt),active:true,createdAt:new Date().toISOString(),lastLogin:null});
+          logEvent('user-add','Employee banaya: '+d.name+' ('+d.role+', ID '+d.empId+')');
+          persist(); closeModal(); render(); toast('Employee ban gaya','ok');
+        };
+      });
+  };
+  $$('[data-upass]').forEach(function(b){ b.onclick=function(){
+    var u=DB.users.filter(function(x){return x.id===b.getAttribute('data-upass')})[0]; if(!u) return;
+    modal('Password badlo — '+u.name,'<form id="p-form"><label class="fld"><span>Naya password *</span><input class="in" name="pass" type="password" required minlength="4"></label>'+
+      '<div class="row"><button class="btn" type="submit">Save</button><button class="btn ghost" type="button" data-close>Cancel</button></div></form>',
+      function(root){
+        root.querySelector('#p-form').onsubmit=function(e){
+          e.preventDefault();
+          var d={}; new FormData(e.target).forEach(function(v,k){d[k]=v});
+          u.salt=newSalt(); u.hash=hashPass(d.pass,u.salt);
+          logEvent('user-pass','Password reset: '+u.name);
+          persist(); closeModal(); toast('Password badal gaya','ok');
+        };
+      });
+  }});
+  $$('[data-utoggle]').forEach(function(b){ b.onclick=function(){
+    var u=DB.users.filter(function(x){return x.id===b.getAttribute('data-utoggle')})[0]; if(!u) return;
+    u.active=!u.active;
+    logEvent('user-block',(u.active?'Unblock: ':'Block: ')+u.name);
+    persist(); render(); toast(u.active?'Account active':'Account block','ok');
+  }});
+  $$('[data-udel]').forEach(function(b){ b.onclick=function(){
+    var id=b.getAttribute('data-udel'), u=DB.users.filter(function(x){return x.id===id})[0]; if(!u) return;
+    if(!confirm('Delete '+u.name+'? Us ki sales history rahegi.')) return;
+    DB.users=DB.users.filter(function(x){return x.id!==id});
+    logEvent('user-del','Employee delete: '+u.name);
+    persist(); render(); toast('Delete ho gaya');
+  }});
+}
+
+/* ---- margin sheet ---- */
+function marginRows(){
+  return DB.medicines.slice().sort(function(a,b){return String(a.name).localeCompare(String(b.name))}).map(function(m){
+    var bs=DB.batches.filter(function(b){return b.medId===m.id && num(b.cost)>0});
+    var actual=bs.length? num(bs[bs.length-1].cost) : (num(m.cost)>0? num(m.cost) : null);
+    var price=num(m.price);
+    var real=(actual!==null && price>0) ? Math.round((price-actual)/price*1000)/10 : null;
+    return {m:m, price:price, margin:medMargin(m), cost:medCost(m), profit:medProfit(m), actual:actual, real:real};
+  });
+}
+function adminMarginsHTML(){
+  var rows=marginRows();
+  var h='<div class="card" style="margin-bottom:14px"><div class="row" style="justify-content:space-between;align-items:center">'+
+    '<div><h3 style="margin:0 0 2px">Margin sheet</h3><div class="small muted">Retail par '+num(DB.settings.defaultMargin)+'% margin (default). "Asli margin" sirf aap dekhte hain.</div></div>'+
+    '<div class="row"><button class="btn ghost" id="m-csv">CSV</button><button class="btn" id="m-print">Print</button></div></div></div>';
+  if(!rows.length){ h+='<div class="card"><div class="empty">Koi medicine nahi.</div></div>'; return h; }
+  h+='<div class="card"><div class="tbl-wrap"><table class="tbl"><thead><tr>'+
+    '<th>Medicine</th><th class="right">Retail</th><th class="right">Margin %</th><th class="right">Cost</th>'+
+    '<th class="right">Munafa / unit</th><th class="right">Asli cost</th><th class="right">Asli margin</th><th></th></tr></thead><tbody>';
+  rows.forEach(function(r){
+    h+='<tr><td><strong>'+esc(r.m.name)+'</strong><div class="small muted">'+esc(packHint(r.m))+'</div></td>'+
+      '<td class="right">'+money(r.price)+'</td>'+
+      '<td class="right"><input class="in sm" style="width:74px;text-align:right" type="number" min="0" max="95" step="0.5" value="'+r.margin+'" data-mm="'+r.m.id+'"></td>'+
+      '<td class="right small">'+money(r.cost)+'</td>'+
+      '<td class="right small">'+money(r.profit)+'</td>'+
+      '<td class="right small">'+(r.actual!==null?money(r.actual):'<span class="muted">-</span>')+'</td>'+
+      '<td class="right small">'+(r.real!==null?'<strong>'+r.real+'%</strong>':'<span class="muted">-</span>')+'</td>'+
+      '<td class="right"><button class="btn ghost sm" data-medit="'+r.m.id+'">Edit</button></td></tr>';
+  });
+  h+='</tbody></table></div></div>';
+  return h;
+}
+function adminMarginsBind(){
+  $$('[data-mm]').forEach(function(inp){
+    inp.addEventListener('change',function(){
+      var m=medById(inp.getAttribute('data-mm')); if(!m) return;
+      m.margin=Math.max(0,Math.min(95,num(inp.value)));
+      logEvent('margin',m.name+' margin '+m.margin+'%');
+      persist(); render(); toast('Margin update: '+m.name+' → '+m.margin+'%','ok');
+    });
+  });
+  $$('[data-medit]').forEach(function(b){ b.onclick=function(){ medForm(medById(b.getAttribute('data-medit'))) } });
+  var csv=$('#m-csv'); if(csv) csv.onclick=function(){
+    var rows=[['Medicine','Retail','Margin %','Cost','Profit per unit','Actual cost','Real margin %']];
+    marginRows().forEach(function(r){ rows.push([r.m.name,r.price,r.margin,r.cost,r.profit,(r.actual!==null?r.actual:''),(r.real!==null?r.real:'')]) });
+    downloadCSV('pharmatrace-margin-sheet-'+localDate(new Date())+'.csv',rows);
+    logEvent('export','Margin sheet CSV export');
+    persist();
+  };
+  var pr=$('#m-print'); if(pr) pr.onclick=function(){
+    var rows=marginRows();
+    var html='<div style="padding:10px"><h2 style="margin:0 0 2px">'+esc(DB.settings.shopName||'Pharmacy')+'</h2>'+
+      '<div style="font-size:12px;margin-bottom:10px">Margin sheet · '+fmtDate(new Date())+'</div>'+
+      '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr>'+
+      ['Medicine','Retail','Margin %','Cost','Munafa/unit','Asli cost','Asli margin'].map(function(x){return '<th style="text-align:left;border-bottom:1px solid #999;padding:4px">'+x+'</th>'}).join('')+
+      '</tr></thead><tbody>'+
+      rows.map(function(r){return '<tr>'+
+        '<td style="padding:4px;border-bottom:1px solid #eee">'+esc(r.m.name)+'</td>'+
+        '<td style="padding:4px;border-bottom:1px solid #eee">'+num(r.price).toFixed(2)+'</td>'+
+        '<td style="padding:4px;border-bottom:1px solid #eee">'+r.margin+'</td>'+
+        '<td style="padding:4px;border-bottom:1px solid #eee">'+num(r.cost).toFixed(2)+'</td>'+
+        '<td style="padding:4px;border-bottom:1px solid #eee">'+num(r.profit).toFixed(2)+'</td>'+
+        '<td style="padding:4px;border-bottom:1px solid #eee">'+(r.actual!==null?num(r.actual).toFixed(2):'-')+'</td>'+
+        '<td style="padding:4px;border-bottom:1px solid #eee">'+(r.real!==null?r.real+'%':'-')+'</td></tr>'}).join('')+
+      '</tbody></table></div>';
+    $('#print-area').innerHTML=html; window.print();
+  };
+}
+
+/* ---- profit by employee ---- */
+function adminProfitHTML(){
+  var from=adFrom||(localDate(new Date()).slice(0,8)+'01'), to=adTo||localDate(new Date());
+  var list=salesBetween(from,to);
+  var salesT=list.reduce(function(t,s){return t+num(s.total)},0);
+  var gross=list.reduce(function(t,s){return t+saleGrossProfit(s)},0);
+  var tax=list.reduce(function(t,s){return t+profitTax(saleGrossProfit(s))},0);
+  var h='<div class="card" style="margin-bottom:14px"><div class="row">'+
+    '<label class="fld" style="margin:0"><span>From</span><input id="ad-from" class="in" type="date" value="'+esc(from)+'"></label>'+
+    '<label class="fld" style="margin:0"><span>To</span><input id="ad-to" class="in" type="date" value="'+esc(to)+'"></label></div></div>';
+  h+='<div class="cards">'+
+    card('Bills',String(list.length),'')+
+    card('Sales',money(salesT),'')+
+    card('Gross profit',money(gross),'before tax')+
+    card('Tax',money(tax),num(DB.settings.taxOnProfit||0.5)+'% on profit')+
+    card('Net profit',money(gross-tax),'after tax')+
+  '</div>';
+  var by={};
+  list.forEach(function(s){
+    var k=s.userName||'Unknown';
+    by[k]=by[k]||{name:k,role:s.role||'',bills:0,sales:0,profit:0};
+    by[k].bills++; by[k].sales+=num(s.total); by[k].profit+=saleProfit(s);
+  });
+  var keys=Object.keys(by).sort(function(a,b){return by[b].profit-by[a].profit});
+  h+='<div class="card"><h3 style="margin:0 0 8px">Kis ne kitna becha</h3><div class="tbl-wrap"><table class="tbl"><thead><tr>'+
+    '<th>Employee</th><th>Role</th><th class="right">Bills</th><th class="right">Sales</th><th class="right">Net profit</th></tr></thead><tbody>';
+  if(!keys.length) h+='<tr><td colspan="5" class="muted">Is arsay mein koi sale nahi.</td></tr>';
+  keys.forEach(function(k){
+    var x=by[k];
+    h+='<tr><td><strong>'+esc(x.name)+'</strong></td><td>'+(x.role?roleTag(x.role):'-')+'</td>'+
+      '<td class="right">'+x.bills+'</td><td class="right">'+money(x.sales)+'</td><td class="right"><strong>'+money(x.profit)+'</strong></td></tr>';
+  });
+  h+='</tbody></table></div></div>';
+  return h;
+}
+function adminProfitBind(){
+  var f=$('#ad-from'), t=$('#ad-to');
+  if(f) f.addEventListener('change',function(){ adFrom=f.value; render(); });
+  if(t) t.addEventListener('change',function(){ adTo=t.value; render(); });
+}
+
+/* ---- audit ---- */
+function adminAuditHTML(){
+  var list=DB.audit.slice(-300).reverse();
+  var h='<div class="card"><div class="row" style="justify-content:space-between"><h3 style="margin:0">Audit log</h3>'+
+    '<span class="small muted">'+DB.audit.length+' entries</span></div>';
+  if(!list.length){ h+='<div class="empty">Abhi koi record nahi.</div></div>'; return h; }
+  h+='<div class="tbl-wrap" style="max-height:60vh;overflow:auto"><table class="tbl"><thead><tr>'+
+    '<th>Waqt</th><th>User</th><th>Action</th><th>Tafseel</th></tr></thead><tbody>';
+  list.forEach(function(a){
+    h+='<tr><td class="small" style="white-space:nowrap">'+esc(fmtDT(a.at))+'</td>'+
+      '<td class="small">'+esc(a.userName||'-')+'</td>'+
+      '<td class="small"><span class="badge">'+esc(a.action)+'</span></td>'+
+      '<td class="small">'+esc(a.detail||'')+'</td></tr>';
+  });
+  h+='</tbody></table></div></div>';
+  return h;
+}
+
+function downloadCSV(name,rows){
+  var csv=rows.map(function(r){return r.map(function(c){return '"'+String(c==null?'':c).replace(/"/g,'""')+'"'}).join(',')}).join('\r\n');
+  var blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+}
+
+/* =========================================================
+   ROUTER
+   ========================================================= */
+var VIEWS={
+  dashboard:{html:dashboardHTML,bind:null},
+  sales:{html:posHTML,bind:posBind},
+  mysales:{html:mySalesHTML,bind:null},
+  inventory:{html:invHTML,bind:invBind},
+  purchases:{html:purHTML,bind:purBind},
+  parties:{html:partyHTML,bind:partyBind},
+  reports:{html:repHTML,bind:repBind},
+  admin:{html:adminHTML,bind:adminBind},
+  settings:{html:setHTML,bind:setBind},
+  assistant:{html:assistHTML,bind:assistBind}
+};
+var route='dashboard';
+
+function render(){
+  var shop=$('#shopName');
+  if(shop) shop.textContent=DB.settings.shopName||'Pharmacy Manager';
+  if(!DB.users.length){ renderSetup(); return; }
+  if(!session){ renderLogin(); return; }
+  var nav=$('#nav'); if(nav) nav.style.display='flex';
+  var u=currentUser();
+  var uc=$('#userchip');
+  if(uc){
+    uc.innerHTML='<div class="who"><b>'+esc(u.name)+'</b><span>'+esc(roleLabel(u.role))+'</span></div>'+
+      '<button class="btn ghost sm" id="btn-logout">Logout</button>';
+    var lo=$('#btn-logout'); if(lo) lo.onclick=function(){ doLogout() };
+  }
+  $$('#nav button').forEach(function(b){
+    var r=b.getAttribute('data-route');
+    b.style.display = routeAllowed(r) ? '' : 'none';
+    b.classList.toggle('active', r===route);
+  });
+  if(!routeAllowed(route)) route = (u.role==='sales') ? 'sales' : 'dashboard';
+  var v=VIEWS[route]||VIEWS.dashboard;
+  $('#app').innerHTML=v.html();
+  if(v.bind) v.bind();
+  window.scrollTo(0,0);
+}
+
+/* global clicks: nav + shared actions */
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-route]');
+  if(t){ route=t.getAttribute('data-route'); render(); return; }
+  var a=e.target.closest('[data-act]');
+  if(a){
+    var act=a.getAttribute('data-act');
+    if(act==='add-med'){ if(!can('fullInventory')){ toast('Sirf main admin medicine add kar sakta hai','err'); return; } medForm(null); }
+    if(act==='add-stock'){ if(!can('stockIn')){ toast('Ijazat nahi','err'); return; } stockInForm(a.getAttribute('data-med')); }
+    if(act==='demo'){ if(!can('fullInventory')){ toast('Ijazat nahi','err'); return; } seedDemo(); render(); toast('Demo data loaded','ok'); }
+    return;
+  }
+  var ed=e.target.closest('[data-edit]');
+  if(ed){ if(!can('fullInventory')){ toast('Sirf main admin','err'); return; } medForm(medById(ed.getAttribute('data-edit'))); return; }
+  var dm=e.target.closest('[data-delmed]');
+  if(dm){
+    if(!can('fullInventory')){ toast('Sirf main admin delete kar sakta hai','err'); return; }
+    var id=dm.getAttribute('data-delmed'), m=medById(id);
+    if(!m) return;
+    if(!confirm('Delete '+m.name+' and all its batches? Past sales stay in the history.')) return;
+    DB.medicines=DB.medicines.filter(function(x){return x.id!==id});
+    DB.batches=DB.batches.filter(function(b){return b.medId!==id});
+    persist(); render(); toast('Medicine deleted');
+    return;
+  }
+  var bt=e.target.closest('[data-batches]');
+  if(bt){ batchesModal(bt.getAttribute('data-batches')); return; }
+  var rc=e.target.closest('[data-receipt]');
+  if(rc){ showReceipt(rc.getAttribute('data-receipt'),false); return; }
+});
+
+/* keyboard: escape closes modal, alt+number switches view */
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') closeModal();
+});
+
+/* boot */
+render();
+</script>
+</body>
+</html>
